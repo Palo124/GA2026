@@ -1,0 +1,392 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//ESN GA 2026//EN
+NAME:ESN General Assembly 2026
+X-WR-CALNAME:ESN General Assembly 2026
+X-WR-TIMEZONE:Europe/Prague
+BEGIN:VTIMEZONE
+TZID:Europe/Prague
+BEGIN:STANDARD
+DTSTART:20251026T030000
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:20260329T020000
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:ga2026-20260514-arrival@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260514T120000
+DTEND;TZID=Europe/Prague:20260514T180000
+SUMMARY:Arrival & travel day (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260514-dinner@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260514T180000
+DTEND;TZID=Europe/Prague:20260514T190000
+SUMMARY:Dinner (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260514-free@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260514T190000
+DTEND;TZID=Europe/Prague:20260514T200000
+SUMMARY:Free time (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260514-icebreaking@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260514T200000
+DTEND;TZID=Europe/Prague:20260514T213000
+SUMMARY:Ice Breaking Games (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260515-registration@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260515T090000
+DTEND;TZID=Europe/Prague:20260515T170000
+SUMMARY:Registration (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260515-dinner@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260515T180000
+DTEND;TZID=Europe/Prague:20260515T190000
+SUMMARY:Dinner (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260515-free@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260515T190000
+DTEND;TZID=Europe/Prague:20260515T200000
+SUMMARY:Free time (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260515-icebreaking@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260515T200000
+DTEND;TZID=Europe/Prague:20260515T213000
+SUMMARY:Ice Breaking Games (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260516-breakfast@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260516T080000
+DTEND;TZID=Europe/Prague:20260516T083000
+SUMMARY:Breakfast (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260516-plenary1@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260516T090000
+DTEND;TZID=Europe/Prague:20260516T110000
+SUMMARY:Plenary (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260516-coffee1@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260516T110000
+DTEND;TZID=Europe/Prague:20260516T113000
+SUMMARY:Coffee break (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260516-plenary2@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260516T113000
+DTEND;TZID=Europe/Prague:20260516T130000
+SUMMARY:Plenary (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260516-lunch@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260516T130000
+DTEND;TZID=Europe/Prague:20260516T140000
+SUMMARY:Lunch (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260516-plenary3@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260516T140000
+DTEND;TZID=Europe/Prague:20260516T163000
+SUMMARY:Plenary (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260516-coffee2@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260516T163000
+DTEND;TZID=Europe/Prague:20260516T170000
+SUMMARY:Coffee break (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260516-plenary4@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260516T170000
+DTEND;TZID=Europe/Prague:20260516T190000
+SUMMARY:Plenary (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260516-dinner@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260516T193000
+DTEND;TZID=Europe/Prague:20260516T203000
+SUMMARY:Dinner (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260516-free@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260516T203000
+DTEND;TZID=Europe/Prague:20260516T210000
+SUMMARY:Free time (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260516-treasure@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260516T210000
+DTEND;TZID=Europe/Prague:20260516T223000
+SUMMARY:Treasure Hunt (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260517-breakfast@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260517T080000
+DTEND;TZID=Europe/Prague:20260517T083000
+SUMMARY:Breakfast (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260517-plenary1@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260517T090000
+DTEND;TZID=Europe/Prague:20260517T110000
+SUMMARY:Plenary (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260517-coffee1@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260517T110000
+DTEND;TZID=Europe/Prague:20260517T113000
+SUMMARY:Coffee break (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260517-plenary2@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260517T113000
+DTEND;TZID=Europe/Prague:20260517T130000
+SUMMARY:Plenary (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260517-lunch@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260517T130000
+DTEND;TZID=Europe/Prague:20260517T140000
+SUMMARY:Lunch (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260517-plenary3@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260517T140000
+DTEND;TZID=Europe/Prague:20260517T163000
+SUMMARY:Plenary (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260517-coffee2@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260517T163000
+DTEND;TZID=Europe/Prague:20260517T170000
+SUMMARY:Coffee break (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260517-plenary4@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260517T170000
+DTEND;TZID=Europe/Prague:20260517T190000
+SUMMARY:Plenary (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260517-dinner@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260517T193000
+DTEND;TZID=Europe/Prague:20260517T203000
+SUMMARY:Dinner (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260517-free@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260517T203000
+DTEND;TZID=Europe/Prague:20260517T210000
+SUMMARY:Free time (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260517-pubquiz@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260517T210000
+DTEND;TZID=Europe/Prague:20260517T223000
+SUMMARY:Pub Quiz (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260518-breakfast@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260518T080000
+DTEND;TZID=Europe/Prague:20260518T083000
+SUMMARY:Breakfast (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260518-plenary1@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260518T090000
+DTEND;TZID=Europe/Prague:20260518T110000
+SUMMARY:Plenary (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260518-coffee1@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260518T110000
+DTEND;TZID=Europe/Prague:20260518T113000
+SUMMARY:Coffee break (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260518-plenary2@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260518T113000
+DTEND;TZID=Europe/Prague:20260518T130000
+SUMMARY:Plenary (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260518-lunch@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260518T130000
+DTEND;TZID=Europe/Prague:20260518T140000
+SUMMARY:Lunch (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260518-plenary3@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260518T140000
+DTEND;TZID=Europe/Prague:20260518T163000
+SUMMARY:Plenary (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260518-coffee2@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260518T163000
+DTEND;TZID=Europe/Prague:20260518T170000
+SUMMARY:Coffee break (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260518-plenary4@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260518T170000
+DTEND;TZID=Europe/Prague:20260518T180000
+SUMMARY:Plenary (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260518-dinner@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260518T183000
+DTEND;TZID=Europe/Prague:20260518T193000
+SUMMARY:Dinner (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260518-free@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260518T193000
+DTEND;TZID=Europe/Prague:20260518T200000
+SUMMARY:Free time (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+BEGIN:VEVENT
+UID:ga2026-20260518-farewell@esn
+DTSTAMP:20250101T000000Z
+DTSTART;TZID=Europe/Prague:20260518T200000
+DTEND;TZID=Europe/Prague:20260518T223000
+SUMMARY:Farewell Party (placeholder)
+LOCATION:Prague, Czech Republic (venue details placeholder)
+DESCRIPTION:Placeholder agenda item.
+END:VEVENT
+END:VCALENDAR
+
