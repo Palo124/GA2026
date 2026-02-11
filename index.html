@@ -43,19 +43,19 @@
     <header class="hero" id="top">
       <div class="container">
         <div class="card hero-card">
-          <h1 class="hero-title">ESN General Assembly 2026</h1>
-          <p class="hero-subtitle">
+          <h1 class="hero-title" data-content="hero.title">ESN General Assembly 2026</h1>
+          <p class="hero-subtitle" data-content="hero.subtitle">
             The annual decision-making gathering where ESN sections meet to align on strategy, community
             priorities, and the year ahead.
           </p>
-          <div class="chip-row" aria-label="Event facts">
+          <div class="chip-row" data-content="hero.chips" aria-label="Event facts">
             <span class="chip">14–18 May 2026</span>
             <span class="chip">Prague</span>
             <span class="chip">Prague University of Economics and Business (VŠE)</span>
           </div>
           <div class="btn-row">
-            <a class="btn btn-primary btn-disabled" href="#" aria-disabled="true">Download info pack</a>
-            <a class="btn btn-secondary btn-disabled" href="#" aria-disabled="true">Contact organisers</a>
+            <a class="btn btn-primary btn-disabled" data-content-href="hero.infoPackUrl" href="#" aria-disabled="true">Download info pack</a>
+            <a class="btn btn-secondary btn-disabled" data-content-href="hero.contactUrl" href="#" aria-disabled="true">Contact organisers</a>
           </div>
         </div>
       </div>
@@ -64,9 +64,9 @@
     <main>
       <section class="section" id="about">
         <div class="container">
-          <h2 class="section-title">About GA</h2>
+          <h2 class="section-title" data-content="about.title">About GA</h2>
           <div class="card">
-            <ul>
+            <ul data-content="about.items">
               <li>Official ESN decision-making event for sections and stakeholders.</li>
               <li>Focus on strategy, knowledge exchange, and community priorities for 2026.</li>
               <li>Mix of plenary sessions, workshops, and networking moments.</li>
@@ -80,12 +80,12 @@
       <section class="section" id="dates-venue">
         <div class="container grid two">
           <div>
-            <h2 class="section-title">Dates &amp; Venue</h2>
+            <h2 class="section-title" data-content="venue.title">Dates &amp; Venue</h2>
             <div class="card">
-              <h3>Prague University of Economics and Business (VŠE)</h3>
-              <p>Address placeholder line 1</p>
-              <p>Address placeholder line 2</p>
-              <p>City / postal code placeholder</p>
+              <h3 data-content="venue.venueName">Prague University of Economics and Business (VŠE)</h3>
+              <p data-content="venue.addressLine1">Address placeholder line 1</p>
+              <p data-content="venue.addressLine2">Address placeholder line 2</p>
+              <p data-content="venue.cityPostal">City / postal code placeholder</p>
               <div class="btn-row">
                 <span class="btn btn-secondary btn-disabled" aria-disabled="true">View agenda</span>
               </div>
@@ -96,6 +96,7 @@
             <div class="map-embed">
               <iframe
                 title="GA 2026 custom map (Google My Maps)"
+                data-content="venue.mapEmbedUrl"
                 src="https://www.google.com/maps/d/embed?mid=1Kbht9FGvpUOa5ALkBO48aLLyJJ_ZGx0&ehbc=2E312F&noprof=1" 
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
@@ -105,16 +106,19 @@
               <summary>University campus map</summary>
               <div class="campus-map-body">
                 <img
+                  data-content="venue.campusMapImage"
                   src="2026-01-19_21-14.png"
-                  alt="University campus map placeholder"
+                  alt="University campus map"
                   loading="lazy"
                 />
               </div>
             </details>
             <h4 style="margin-top: 1.2rem">Getting there</h4>
-            <p>Public transport placeholder (metro/tram lines).</p>
-            <p>Walking routes placeholder.</p>
-            <p>Taxi/ride share guidance placeholder.</p>
+            <div data-content="venue.gettingThere">
+              <p>Public transport placeholder (metro/tram lines).</p>
+              <p>Walking routes placeholder.</p>
+              <p>Taxi/ride share guidance placeholder.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -653,34 +657,42 @@
                 <span class="color-dot dot-cyan"></span>
                 Accommodation
               </div>
-              <p>Tier 1: Hotel placeholder (price range placeholder).</p>
-              <p>Tier 2: Budget hotel placeholder (price range placeholder).</p>
-              <p>Tier 3: Hostel placeholder (price range placeholder).</p>
+              <div data-content="practical.accommodation">
+                <p>Tier 1: Hotel placeholder (price range placeholder).</p>
+                <p>Tier 2: Budget hotel placeholder (price range placeholder).</p>
+                <p>Tier 3: Hostel placeholder (price range placeholder).</p>
+              </div>
             </div>
             <div class="card">
               <div class="card-header">
                 <span class="color-dot dot-green"></span>
                 Food &amp; Dietary
               </div>
-              <p>Meal schedule placeholder.</p>
-              <p>Dietary requirements process placeholder.</p>
-              <p>Nearby options placeholder.</p>
+              <div data-content="practical.foodDietary">
+                <p>Meal schedule placeholder.</p>
+                <p>Dietary requirements process placeholder.</p>
+                <p>Nearby options placeholder.</p>
+              </div>
             </div>
             <div class="card">
               <div class="card-header">
                 <span class="color-dot dot-orange"></span>
                 Accessibility
               </div>
-              <p>Accessibility statement placeholder.</p>
-              <p>Contact channel placeholder for accessibility needs.</p>
+              <div data-content="practical.accessibility">
+                <p>Accessibility statement placeholder.</p>
+                <p>Contact channel placeholder for accessibility needs.</p>
+              </div>
             </div>
             <div class="card">
               <div class="card-header">
                 <span class="color-dot dot-magenta"></span>
                 Emergency Info
               </div>
-              <p>Local emergency numbers placeholder.</p>
-              <p>On-site help desk placeholder.</p>
+              <div data-content="practical.emergency">
+                <p>Local emergency numbers placeholder.</p>
+                <p>On-site help desk placeholder.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -689,7 +701,7 @@
       <section class="section" id="documents">
         <div class="container">
           <h2 class="section-title">Documents</h2>
-          <div class="grid two">
+          <div class="grid two" data-content="documents">
             <div class="card doc-card">
               <h3>Info Pack</h3>
               <p>PDF placeholder. Final version to be shared closer to the event.</p>
@@ -712,6 +724,7 @@
       <section class="section" id="faq">
         <div class="container">
           <h2 class="section-title">FAQ</h2>
+          <div data-content="faq">
           <details>
             <summary>Who can attend GA 2026?</summary>
             <div class="accordion-content">Attendance policy placeholder.</div>
@@ -752,6 +765,7 @@
             <summary>Where can I find updates after the event?</summary>
             <div class="accordion-content">Post-event communications placeholder.</div>
           </details>
+          </div>
         </div>
       </section>
 
@@ -761,21 +775,21 @@
             <h2 class="section-title">Contacts</h2>
             <div class="card">
               <p><strong>Organising Committee</strong></p>
-              <p>Email placeholder (no real email provided).</p>
+              <p data-content="contacts.ocEmail">Email placeholder (no real email provided).</p>
               <p><strong>Venue Contact</strong></p>
-              <p>Phone/email placeholder (no real details provided).</p>
+              <p data-content="contacts.venueContact">Phone/email placeholder (no real details provided).</p>
             </div>
           </div>
           <div class="contacts-side">
             <h2 class="section-title social-heading">Social media</h2>
             <div class="card">
-              <p>Instagram placeholder</p>
-              <p>Facebook placeholder</p>
-              <p>LinkedIn placeholder</p>
+              <p data-content="social.instagram">Instagram placeholder</p>
+              <p data-content="social.facebook">Facebook placeholder</p>
+              <p data-content="social.linkedin">LinkedIn placeholder</p>
             </div>
             <h2 class="section-title sponsor-heading">Sponsors</h2>
             <div class="card sponsor-card">
-              <div class="sponsor-grid">
+              <div class="sponsor-grid" data-content="sponsors">
                 <div class="sponsor-logo">Logo placeholder</div>
                 <div class="sponsor-logo">Logo placeholder</div>
                 <div class="sponsor-logo">Logo placeholder</div>
@@ -789,12 +803,14 @@
 
     <footer class="footer">
       <div class="container">
-        <p>ESN General Assembly 2026 – informational landing page only.</p>
-        <p>Copyright placeholder © 2026.</p>
-        <p>ESN Visual Identity rules respected (fonts, colors, logo safe zones).</p>
+        <p data-content="footer.line1">ESN General Assembly 2026 – informational landing page only.</p>
+        <p data-content="footer.copyright">Copyright placeholder © 2026.</p>
+        <p data-content="footer.identityNote">ESN Visual Identity rules respected (fonts, colors, logo safe zones).</p>
       </div>
     </footer>
 
+    <script src="sheet-config.js"></script>
+    <script src="content-loader.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

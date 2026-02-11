@@ -1,0 +1,76 @@
+{
+  "hero": {
+    "title": "ESN General Assembly 2026",
+    "subtitle": "The annual decision-making gathering where ESN sections meet to align on strategy, community priorities, and the year ahead.",
+    "chips": [
+      { "value": "14–18 May 2026" },
+      { "value": "Prague" },
+      { "value": "Prague University of Economics and Business (VŠE)" }
+    ],
+    "infoPackUrl": "#",
+    "contactUrl": "#"
+  },
+  "about": {
+    "title": "About GA",
+    "items": [
+      { "value": "Official ESN decision-making event for sections and stakeholders." },
+      { "value": "Focus on strategy, knowledge exchange, and community priorities for 2026." },
+      { "value": "Mix of plenary sessions, workshops, and networking moments." },
+      { "value": "Hosted in Prague with a local organising committee." },
+      { "value": "Attendance by registered ESN delegates and invited guests." }
+    ]
+  },
+  "venue": {
+    "title": "Dates & Venue",
+    "venueName": "Prague University of Economics and Business (VŠE)",
+    "addressLine1": "Address placeholder line 1",
+    "addressLine2": "Address placeholder line 2",
+    "cityPostal": "City / postal code placeholder",
+    "mapEmbedUrl": "https://www.google.com/maps/d/embed?mid=1Kbht9FGvpUOa5ALkBO48aLLyJJ_ZGx0&ehbc=2E312F&noprof=1",
+    "campusMapImage": "2026-01-19_21-14.png",
+    "gettingThere": "Public transport placeholder (metro/tram lines). Walking routes placeholder. Taxi/ride share guidance placeholder."
+  },
+  "contacts": {
+    "ocEmail": "Email placeholder (no real email provided).",
+    "venueContact": "Phone/email placeholder (no real details provided)."
+  },
+  "social": {
+    "instagram": "Instagram placeholder",
+    "facebook": "Facebook placeholder",
+    "linkedin": "LinkedIn placeholder"
+  },
+  "sponsors": [
+    { "name": "Logo placeholder" },
+    { "name": "Logo placeholder" },
+    { "name": "Logo placeholder" },
+    { "name": "Logo placeholder" }
+  ],
+  "faq": [
+    { "question": "Who can attend GA 2026?", "answer": "Attendance policy placeholder." },
+    { "question": "What language will sessions be in?", "answer": "Language policy placeholder." },
+    { "question": "How do I get from the airport to the venue?", "answer": "Airport transfer placeholder." },
+    { "question": "What should delegates bring?", "answer": "Packing checklist placeholder." },
+    { "question": "Is there a dress code?", "answer": "Dress code placeholder." },
+    { "question": "Will sessions be recorded?", "answer": "Recording policy placeholder." },
+    { "question": "How are dietary requirements handled?", "answer": "Dietary process placeholder." },
+    { "question": "What accessibility support is available?", "answer": "Accessibility support placeholder." },
+    { "question": "Who do I contact for urgent issues?", "answer": "Emergency contact placeholder." },
+    { "question": "Where can I find updates after the event?", "answer": "Post-event communications placeholder." }
+  ],
+  "documents": [
+    { "title": "Info Pack", "description": "PDF placeholder. Final version to be shared closer to the event.", "url": "#", "linkText": "Download info pack (PDF)" },
+    { "title": "Agenda", "description": "PDF placeholder. Latest draft will be updated regularly.", "url": "#", "linkText": "Download agenda (PDF)" },
+    { "title": "Code of Conduct", "description": "Placeholder link to ESN Code of Conduct.", "url": "#", "linkText": "View Code of Conduct" }
+  ],
+  "practical": {
+    "accommodation": "Tier 1: Hotel placeholder (price range placeholder). Tier 2: Budget hotel placeholder. Tier 3: Hostel placeholder.",
+    "foodDietary": "Meal schedule placeholder. Dietary requirements process placeholder. Nearby options placeholder.",
+    "accessibility": "Accessibility statement placeholder. Contact channel placeholder for accessibility needs.",
+    "emergency": "Local emergency numbers placeholder. On-site help desk placeholder."
+  },
+  "footer": {
+    "line1": "ESN General Assembly 2026 – informational landing page only.",
+    "copyright": "Copyright placeholder © 2026.",
+    "identityNote": "ESN Visual Identity rules respected (fonts, colors, logo safe zones)."
+  }
+}

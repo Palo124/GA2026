@@ -1,0 +1,54 @@
+key,value
+hero.title,ESN General Assembly 2026
+hero.subtitle,The annual decision-making gathering where ESN sections meet to align on strategy, community priorities, and the year ahead.
+hero.chips,14–18 May 2026;Prague;Prague University of Economics and Business (VŠE)
+hero.infoPackUrl,#
+hero.contactUrl,#
+about.title,About GA
+about.items,"Official ESN decision-making event for sections and stakeholders.;Focus on strategy, knowledge exchange, and community priorities for 2026.;Mix of plenary sessions, workshops, and networking moments.;Hosted in Prague with a local organising committee.;Attendance by registered ESN delegates and invited guests."
+venue.title,Dates & Venue
+venue.venueName,Prague University of Economics and Business (VŠE)
+venue.addressLine1,Address placeholder line 1
+venue.addressLine2,Address placeholder line 2
+venue.cityPostal,City / postal code placeholder
+venue.mapEmbedUrl,https://www.google.com/maps/d/embed?mid=1Kbht9FGvpUOa5ALkBO48aLLyJJ_ZGx0&ehbc=2E312F&noprof=1
+venue.campusMapImage,2026-01-19_21-14.png
+venue.gettingThere,"Public transport placeholder (metro/tram lines). Walking routes placeholder. Taxi/ride share guidance placeholder."
+contacts.ocEmail,Email placeholder (no real email provided).
+contacts.venueContact,Phone/email placeholder (no real details provided).
+social.instagram,Instagram placeholder
+social.facebook,Facebook placeholder
+social.linkedin,LinkedIn placeholder
+practical.accommodation,"Tier 1: Hotel placeholder (price range placeholder). Tier 2: Budget hotel placeholder. Tier 3: Hostel placeholder."
+practical.foodDietary,"Meal schedule placeholder. Dietary requirements process placeholder. Nearby options placeholder."
+practical.accessibility,"Accessibility statement placeholder. Contact channel placeholder for accessibility needs."
+practical.emergency,"Local emergency numbers placeholder. On-site help desk placeholder."
+footer.line1,ESN General Assembly 2026 – informational landing page only.
+footer.copyright,Copyright placeholder © 2026.
+footer.identityNote,ESN Visual Identity rules respected (fonts, colors, logo safe zones).
+
+[FAQ]
+question,answer
+Who can attend GA 2026?,Attendance policy placeholder.
+What language will sessions be in?,Language policy placeholder.
+How do I get from the airport to the venue?,Airport transfer placeholder.
+What should delegates bring?,Packing checklist placeholder.
+Is there a dress code?,Dress code placeholder.
+Will sessions be recorded?,Recording policy placeholder.
+How are dietary requirements handled?,Dietary process placeholder.
+What accessibility support is available?,Accessibility support placeholder.
+Who do I contact for urgent issues?,Emergency contact placeholder.
+Where can I find updates after the event?,Post-event communications placeholder.
+
+[DOCUMENTS]
+title,description,url,linkText
+Info Pack,"PDF placeholder. Final version to be shared closer to the event.",#,Download info pack (PDF)
+Agenda,"PDF placeholder. Latest draft will be updated regularly.",#,Download agenda (PDF)
+Code of Conduct,Placeholder link to ESN Code of Conduct.,#,View Code of Conduct
+
+[SPONSORS]
+name
+Logo placeholder
+Logo placeholder
+Logo placeholder
+Logo placeholder
