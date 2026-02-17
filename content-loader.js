@@ -135,7 +135,15 @@
       var mapIframe = document.querySelector('[data-content="venue.mapEmbedUrl"]');
       if (mapIframe) mapIframe.setAttribute('src', venue.mapEmbedUrl || '');
       var campusImg = document.querySelector('[data-content="venue.campusMapImage"]');
-      if (campusImg) campusImg.setAttribute('src', venue.campusMapImage || '');
+      if (campusImg && venue.campusMapImage) {
+        campusImg.setAttribute('src', venue.campusMapImage);
+        var pic = campusImg.closest('picture');
+        if (pic) {
+          var webpSrc = venue.campusMapImage.replace(/\.(png|jpe?g)$/i, '.webp');
+          var srcEl = pic.querySelector('source[type="image/webp"]');
+          if (srcEl) srcEl.setAttribute('srcset', webpSrc);
+        }
+      }
       var gettingThere = document.querySelector('[data-content="venue.gettingThere"]');
       if (gettingThere && venue.gettingThere) {
         var ps = venue.gettingThere.split(/\.\s+/).filter(Boolean);

@@ -3,15 +3,45 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ESN General Assembly 2026</title>
-    <link rel="stylesheet" href="styles.css" />
+    <title>GA Prague 2026 – Official Website</title>
+    <meta name="description" content="Official GA Prague 2026 event website. Program, speakers, tickets and location. ESN General Assembly 14–18 May 2026 in Prague." />
+    <link rel="canonical" href="https://ga-prague.eu/" />
+    <meta property="og:title" content="GA Prague 2026 – Official Website" />
+    <meta property="og:description" content="Official GA Prague 2026 event website. Program, speakers, tickets and location." />
+    <meta property="og:image" content="https://ga-prague.eu/preview.jpg" />
+    <meta property="og:url" content="https://ga-prague.eu/" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "GA Prague 2026",
+  "startDate": "2026-05-14",
+  "endDate": "2026-05-18",
+  "location": {
+    "@type": "Place",
+    "name": "Prague University of Economics and Business (VŠE)",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Prague",
+      "addressCountry": "Czech Republic"
+    }
+  },
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "eventStatus": "https://schema.org/EventScheduled"
+}
+    </script>
+    <link rel="stylesheet" href="styles.min.css" />
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <header>
     <nav class="nav">
       <div class="container nav-inner">
         <a class="brand" href="#top">
           <span class="logo-wrap" aria-hidden="true">
-            <img src="esnstar_digital_full_colour_0.png" alt="ESN logo" class="logo-img" />
+            <img src="esnstar_digital_full_colour_0.png" alt="Erasmus Student Network logo" class="logo-img" width="40" height="40" />
           </span>
           <span>ESN General Assembly 2026</span>
         </a>
@@ -39,8 +69,10 @@
         <a href="#contacts">Contacts</a>
       </div>
     </nav>
+    </header>
 
-    <header class="hero" id="top">
+    <main id="main-content">
+    <section class="hero" id="top">
       <div class="container">
         <div class="card hero-card">
           <h1 class="hero-title" data-content="hero.title">ESN General Assembly 2026</h1>
@@ -59,9 +91,7 @@
           </div>
         </div>
       </div>
-    </header>
-
-    <main>
+    </section>
       <section class="section" id="about">
         <div class="container">
           <h2 class="section-title" data-content="about.title">About GA</h2>
@@ -105,15 +135,20 @@
             <details class="campus-map">
               <summary>University campus map</summary>
               <div class="campus-map-body">
-                <img
-                  data-content="venue.campusMapImage"
-                  src="2026-01-19_21-14.png"
-                  alt="University campus map"
-                  loading="lazy"
-                />
+                <picture>
+                  <source type="image/webp" srcset="2026-01-19_21-14.webp" />
+                  <img
+                    data-content="venue.campusMapImage"
+                    src="2026-01-19_21-14.png"
+                    alt="University campus map showing VŠE Prague campus layout"
+                    loading="lazy"
+                    width="1200"
+                    height="auto"
+                  />
+                </picture>
               </div>
             </details>
-            <h4 style="margin-top: 1.2rem">Getting there</h4>
+            <h3 style="margin-top: 1.2rem">Getting there</h3>
             <div data-content="venue.gettingThere">
               <p>Public transport placeholder (metro/tram lines).</p>
               <p>Walking routes placeholder.</p>
@@ -809,9 +844,7 @@
       </div>
     </footer>
 
-    <script src="sheet-config.js"></script>
-    <script src="content-loader.js"></script>
-    <script src="script.js"></script>
+    <script src="scripts.min.js" defer></script>
   </body>
 </html>
 

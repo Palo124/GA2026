@@ -4,7 +4,8 @@
   "private": true,
   "description": "Static informational landing page for ESN General Assembly 2026",
   "scripts": {
-    "dev": "live-server --host=0.0.0.0 --port=5173 --open=./index.html --watch=./index.html,./styles.css,./script.js,./content-loader.js,./content"
+    "dev": "live-server --host=0.0.0.0 --port=5173 --open=./index.html --watch=./index.html,./styles.css,./script.js,./content-loader.js,./content",
+    "build": "npx --yes clean-css-cli -o styles.min.css styles.css && npx --yes terser sheet-config.js content-loader.js script.js -o scripts.min.js -c -m"
   },
   "devDependencies": {
     "live-server": "^1.2.2"

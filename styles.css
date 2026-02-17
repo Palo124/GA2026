@@ -120,6 +120,22 @@ a {
   fill: none;
 }
 
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  padding: 0.6rem 1rem;
+  background: var(--esn-cyan);
+  color: var(--esn-white);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  z-index: 1000;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
