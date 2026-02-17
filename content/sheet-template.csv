@@ -47,10 +47,10 @@ Agenda,"PDF placeholder. Latest draft will be updated regularly.",#,Download age
 Code of Conduct,Placeholder link to ESN Code of Conduct.,#,View Code of Conduct
 
 [LOCALS_RECOMMEND]
-name,description,category,url
-Charles Bridge,"Iconic 14th-century bridge with stunning views of the Vltava and Prague Castle. Best visited at sunrise.",Sight,https://www.google.com/maps/search/Charles+Bridge+Prague
-Place name placeholder,Short description of the place. Add your favourite spots in Prague.,Restaurant,#
-Place name placeholder,Short description of the place.,Café,#
+name,description,category,url,linkText
+Charles Bridge,"Iconic 14th-century bridge with stunning views of the Vltava and Prague Castle. Best visited at sunrise.",Sight,https://www.google.com/maps/search/Charles+Bridge+Prague,View on map
+Place name placeholder,Short description of the place. Add your favourite spots in Prague.,Restaurant,#,View on map
+Place name placeholder,Short description of the place.,Café,#,View on map
 
 [SPONSORS]
 name,logoUrl,url

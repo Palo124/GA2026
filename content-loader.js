@@ -89,7 +89,7 @@
         } else if (section === 'sponsors' && a0 !== 'name' && (a0 || a1)) {
           data.sponsors.push({ name: a0, logoUrl: (a1 || '').trim(), url: (r[2] || '').trim() });
         } else if (section === 'localsRecommend' && a0 !== 'name' && a0) {
-          data.localsRecommend.push({ name: a0, description: a1, category: (r[2] || '').trim(), url: (r[3] || '#').trim() });
+          data.localsRecommend.push({ name: a0, description: a1, category: (r[2] || '').trim(), url: (r[3] || '#').trim(), linkText: (r[4] || 'View on map').trim() });
         }
       }
       return data;
@@ -201,8 +201,9 @@
         var desc = (p.description || '').replace(/</g, '&lt;');
         var cat = (p.category || '').replace(/</g, '&lt;');
         var url = p.url || '#';
-        var disabled = url === '#' ? ' btn-disabled" href="#" aria-disabled="true"' : '" href="' + (url + '').replace(/"/g, '&quot;') + '" target="_blank" rel="noopener"';
-        return '<div class="card doc-card"><span class="place-category">' + cat + '</span><h3>' + name + '</h3><p>' + desc + '</p><a class="btn btn-secondary' + disabled + '>View on map</a></div>';
+        var linkText = (p.linkText || 'View on map').replace(/</g, '&lt;');
+        var disabled = url === '#' ? ' btn-disabled" href="#" aria-disabled="true"' : '" href="' + (url + '').replace(/"/g, '&quot;') + '"';
+        return '<div class="card doc-card"><span class="place-category">' + cat + '</span><h3>' + name + '</h3><p>' + desc + '</p><a class="btn btn-secondary' + disabled + '>' + linkText + '</a></div>';
       }).join('');
     }
 

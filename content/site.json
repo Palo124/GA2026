@@ -58,9 +58,9 @@
     { "question": "Where can I find updates after the event?", "answer": "Post-event communications placeholder." }
   ],
   "localsRecommend": [
-    { "name": "Charles Bridge", "description": "Iconic 14th-century bridge with stunning views of the Vltava and Prague Castle. Best visited at sunrise.", "category": "Sight", "url": "https://www.google.com/maps/search/Charles+Bridge+Prague" },
-    { "name": "Place name placeholder", "description": "Short description of the place. Add your favourite spots in Prague.", "category": "Restaurant", "url": "#" },
-    { "name": "Place name placeholder", "description": "Short description of the place.", "category": "Café", "url": "#" }
+    { "name": "Charles Bridge", "description": "Iconic 14th-century bridge with stunning views of the Vltava and Prague Castle. Best visited at sunrise.", "category": "Sight", "url": "https://www.google.com/maps/search/Charles+Bridge+Prague", "linkText": "View on map" },
+    { "name": "Place name placeholder", "description": "Short description of the place. Add your favourite spots in Prague.", "category": "Restaurant", "url": "#", "linkText": "View on map" },
+    { "name": "Place name placeholder", "description": "Short description of the place.", "category": "Café", "url": "#", "linkText": "View on map" }
   ],
   "documents": [
     { "title": "Info Pack", "description": "PDF placeholder. Final version to be shared closer to the event.", "url": "#", "linkText": "Download info pack (PDF)" },
