@@ -1,5 +1,5 @@
 key,value
-hero.title,ESN General Assembly 2026
+hero.title,ESN General Assembly Prague 2026
 hero.subtitle,The annual decision-making gathering where ESN sections meet to align on strategy, community priorities, and the year ahead.
 hero.chips,14–18 May 2026;Prague;Prague University of Economics and Business (VŠE)
 hero.infoPackUrl,#
@@ -45,6 +45,12 @@ title,description,url,linkText
 Info Pack,"PDF placeholder. Final version to be shared closer to the event.",#,Download info pack (PDF)
 Agenda,"PDF placeholder. Latest draft will be updated regularly.",#,Download agenda (PDF)
 Code of Conduct,Placeholder link to ESN Code of Conduct.,#,View Code of Conduct
+
+[LOCALS_RECOMMEND]
+name,description,category,url
+Charles Bridge,"Iconic 14th-century bridge with stunning views of the Vltava and Prague Castle. Best visited at sunrise.",Sight,https://www.google.com/maps/search/Charles+Bridge+Prague
+Place name placeholder,Short description of the place. Add your favourite spots in Prague.,Restaurant,#
+Place name placeholder,Short description of the place.,Café,#
 
 [SPONSORS]
 name

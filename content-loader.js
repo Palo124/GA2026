@@ -43,7 +43,7 @@
     return fetchUrl(url).then(function (text) {
       if (!text) return null;
       var rows = parseCSV(text);
-      var data = { hero: {}, about: {}, venue: {}, contacts: {}, social: {}, practical: {}, footer: {}, faq: [], documents: [], sponsors: [] };
+      var data = { hero: {}, about: {}, venue: {}, contacts: {}, social: {}, practical: {}, footer: {}, faq: [], documents: [], sponsors: [], localsRecommend: [] };
       var section = 'config';
       var i;
       for (i = 0; i < rows.length; i++) {
@@ -53,6 +53,7 @@
         if (a0 === '[FAQ]') { section = 'faq'; continue; }
         if (a0 === '[DOCUMENTS]') { section = 'documents'; continue; }
         if (a0 === '[SPONSORS]') { section = 'sponsors'; continue; }
+        if (a0 === '[LOCALS_RECOMMEND]') { section = 'localsRecommend'; continue; }
         if (section === 'config' && a0 && a0 !== 'key') {
           if (a0 === 'hero.title') data.hero.title = a1;
           else if (a0 === 'hero.subtitle') data.hero.subtitle = a1;
@@ -87,6 +88,8 @@
           data.documents.push({ title: a0, description: a1, url: (r[2] || '#').trim(), linkText: (r[3] || 'Download / View').trim() });
         } else if (section === 'sponsors' && a0 !== 'name' && a0) {
           data.sponsors.push({ name: a0 });
+        } else if (section === 'localsRecommend' && a0 !== 'name' && a0) {
+          data.localsRecommend.push({ name: a0, description: a1, category: (r[2] || '').trim(), url: (r[3] || '#').trim() });
         }
       }
       return data;
@@ -180,6 +183,19 @@
         var q = (item.question || '').replace(/</g, '&lt;').replace(/"/g, '&quot;');
         var a = (item.answer || '').replace(/</g, '&lt;');
         return '<details><summary>' + q + '</summary><div class="accordion-content">' + a + '</div></details>';
+      }).join('');
+    }
+
+    var localsRecommend = data.localsRecommend;
+    var localsContainer = document.querySelector('[data-content="localsRecommend"]');
+    if (localsContainer && Array.isArray(localsRecommend)) {
+      localsContainer.innerHTML = localsRecommend.map(function (p) {
+        var name = (p.name || '').replace(/</g, '&lt;');
+        var desc = (p.description || '').replace(/</g, '&lt;');
+        var cat = (p.category || '').replace(/</g, '&lt;');
+        var url = p.url || '#';
+        var disabled = url === '#' ? ' btn-disabled" href="#" aria-disabled="true"' : '" href="' + (url + '').replace(/"/g, '&quot;') + '" target="_blank" rel="noopener"';
+        return '<div class="card doc-card"><span class="place-category">' + cat + '</span><h3>' + name + '</h3><p>' + desc + '</p><a class="btn btn-secondary' + disabled + '>View on map</a></div>';
       }).join('');
     }
 

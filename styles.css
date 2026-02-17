@@ -271,8 +271,8 @@ a {
 
 .hero-card {
   max-width: 680px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
 }
 
 .hero-title {
@@ -482,6 +482,24 @@ details[open] summary::after {
 
 .dot-orange {
   background: var(--esn-orange);
+}
+
+.place-category {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--esn-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
+.place-category:empty {
+  display: none;
+}
+
+.section-intro {
+  margin-bottom: 1.5rem;
+  max-width: 600px;
 }
 
 .doc-card a {
