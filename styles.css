@@ -169,10 +169,17 @@ a {
   cursor: not-allowed;
 }
 
-/* Navigation */
+/* Navigation – sticky so hamburger menu is always reachable when scrolling */
+header {
+  width: 100%;
+}
+
 .nav {
   position: sticky;
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   z-index: 100;
   background: var(--esn-white);
   border-bottom: 1px solid var(--esn-gray-100);
