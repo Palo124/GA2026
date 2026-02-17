@@ -53,8 +53,8 @@ Place name placeholder,Short description of the place. Add your favourite spots 
 Place name placeholder,Short description of the place.,Café,#
 
 [SPONSORS]
-name
-Logo placeholder
-Logo placeholder
-Logo placeholder
-Logo placeholder
+name,logoUrl,url
+Logo placeholder,,#
+Logo placeholder,,#
+Logo placeholder,,#
+Logo placeholder,,#

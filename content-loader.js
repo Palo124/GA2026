@@ -86,8 +86,8 @@
           data.faq.push({ question: a0, answer: a1 });
         } else if (section === 'documents' && a0 !== 'title' && a0) {
           data.documents.push({ title: a0, description: a1, url: (r[2] || '#').trim(), linkText: (r[3] || 'Download / View').trim() });
-        } else if (section === 'sponsors' && a0 !== 'name' && a0) {
-          data.sponsors.push({ name: a0 });
+        } else if (section === 'sponsors' && a0 !== 'name' && (a0 || a1)) {
+          data.sponsors.push({ name: a0, logoUrl: (a1 || '').trim(), url: (r[2] || '').trim() });
         } else if (section === 'localsRecommend' && a0 !== 'name' && a0) {
           data.localsRecommend.push({ name: a0, description: a1, category: (r[2] || '').trim(), url: (r[3] || '#').trim() });
         }
@@ -171,8 +171,15 @@
     var sponsorGrid = document.querySelector('[data-content="sponsors"]');
     if (sponsorGrid && Array.isArray(sponsors)) {
       sponsorGrid.innerHTML = sponsors.map(function (s) {
-        var n = s && (s.name != null ? s.name : s);
-        return '<div class="sponsor-logo">' + (n || '').replace(/</g, '&lt;') + '</div>';
+        var n = (s && s.name != null ? s.name : s) || '';
+        var logoUrl = (s && s.logoUrl) ? (s.logoUrl + '').replace(/"/g, '&quot;') : '';
+        var url = (s && s.url && s.url !== '#') ? (s.url + '').replace(/"/g, '&quot;') : '';
+        var nameEsc = n.replace(/</g, '&lt;');
+        var inner = logoUrl
+          ? '<img src="' + logoUrl + '" alt="' + nameEsc + '" loading="lazy" />'
+          : '<span>' + nameEsc + '</span>';
+        var wrap = url ? '<a class="sponsor-logo sponsor-link" href="' + url + '" target="_blank" rel="noopener">' + inner + '</a>' : '<div class="sponsor-logo">' + inner + '</div>';
+        return wrap;
       }).join('');
     }
 

@@ -40,10 +40,10 @@
     "linkedin": "LinkedIn placeholder"
   },
   "sponsors": [
-    { "name": "Logo placeholder" },
-    { "name": "Logo placeholder" },
-    { "name": "Logo placeholder" },
-    { "name": "Logo placeholder" }
+    { "name": "Logo placeholder", "logoUrl": "", "url": "#" },
+    { "name": "Logo placeholder", "logoUrl": "", "url": "#" },
+    { "name": "Logo placeholder", "logoUrl": "", "url": "#" },
+    { "name": "Logo placeholder", "logoUrl": "", "url": "#" }
   ],
   "faq": [
     { "question": "Who can attend GA 2026?", "answer": "Attendance policy placeholder." },
