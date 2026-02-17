@@ -27,6 +27,17 @@ footer.line1,ESN General Assembly 2026 – informational landing page only.
 footer.copyright,Copyright placeholder © 2026.
 footer.identityNote,ESN Visual Identity rules respected (fonts, colors, logo safe zones).
 
+[CONTACTS]
+picture,group,name,email,phone
+,Organising Committee,Contact name placeholder,oc@example.com,+420 123 456 789
+,Venue Contact,Venue contact name placeholder,venue@vse.cz,+420 987 654 321
+
+[SOCIAL]
+name,url
+Instagram,#
+Facebook,#
+LinkedIn,#
+
 [FAQ]
 question,answer
 Who can attend GA 2026?,Attendance policy placeholder.

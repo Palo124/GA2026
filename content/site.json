@@ -30,15 +30,15 @@
     "campusMapImage": "2026-01-19_21-14.png",
     "gettingThere": "Public transport placeholder (metro/tram lines). Walking routes placeholder. Taxi/ride share guidance placeholder."
   },
-  "contacts": {
-    "ocEmail": "Email placeholder (no real email provided).",
-    "venueContact": "Phone/email placeholder (no real details provided)."
-  },
-  "social": {
-    "instagram": "Instagram placeholder",
-    "facebook": "Facebook placeholder",
-    "linkedin": "LinkedIn placeholder"
-  },
+  "contacts": [
+    { "picture": "", "group": "Organising Committee", "name": "Contact name placeholder", "email": "oc@example.com", "phone": "+420 123 456 789" },
+    { "picture": "", "group": "Venue Contact", "name": "Venue contact name placeholder", "email": "venue@vse.cz", "phone": "+420 987 654 321" }
+  ],
+  "social": [
+    { "name": "Instagram", "url": "#" },
+    { "name": "Facebook", "url": "#" },
+    { "name": "LinkedIn", "url": "#" }
+  ],
   "sponsors": [
     { "name": "Logo placeholder", "logoUrl": "", "url": "#" },
     { "name": "Logo placeholder", "logoUrl": "", "url": "#" },

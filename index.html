@@ -849,31 +849,47 @@
       </section>
 
       <section class="section" id="contacts">
-        <div class="container grid two">
-          <div>
-            <h2 class="section-title">Contacts</h2>
-            <div class="card">
-              <p><strong>Organising Committee</strong></p>
-              <p data-content="contacts.ocEmail">Email placeholder (no real email provided).</p>
-              <p><strong>Venue Contact</strong></p>
-              <p data-content="contacts.venueContact">Phone/email placeholder (no real details provided).</p>
-            </div>
+        <div class="container">
+          <h2 class="section-title">Contacts</h2>
+          <div class="card">
+            <ul class="contact-list" data-content="contactsList" aria-label="Contact persons">
+              <li class="contact-item">
+                <div class="contact-avatar">
+                  <span class="contact-avatar-placeholder" aria-hidden="true">?</span>
+                </div>
+                <div class="contact-details">
+                  <span class="contact-group">Organising Committee</span>
+                  <span class="contact-name">Contact name placeholder</span>
+                  <span class="contact-email"><a href="mailto:oc@example.com">oc@example.com</a></span>
+                  <span class="contact-phone"><a href="tel:+420123456789">+420 123 456 789</a></span>
+                </div>
+              </li>
+              <li class="contact-item">
+                <div class="contact-avatar">
+                  <span class="contact-avatar-placeholder" aria-hidden="true">?</span>
+                </div>
+                <div class="contact-details">
+                  <span class="contact-group">Venue Contact</span>
+                  <span class="contact-name">Venue contact name placeholder</span>
+                  <span class="contact-email"><a href="mailto:venue@vse.cz">venue@vse.cz</a></span>
+                  <span class="contact-phone"><a href="tel:+420987654321">+420 987 654 321</a></span>
+                </div>
+              </li>
+            </ul>
           </div>
-          <div class="contacts-side">
-            <h2 class="section-title social-heading">Social media</h2>
-            <div class="card">
-              <p data-content="social.instagram">Instagram placeholder</p>
-              <p data-content="social.facebook">Facebook placeholder</p>
-              <p data-content="social.linkedin">LinkedIn placeholder</p>
-            </div>
-            <h2 class="section-title sponsor-heading">Sponsors</h2>
-            <div class="card sponsor-card">
-              <div class="sponsor-grid" data-content="sponsors">
-                <div class="sponsor-logo">Logo placeholder</div>
-                <div class="sponsor-logo">Logo placeholder</div>
-                <div class="sponsor-logo">Logo placeholder</div>
-                <div class="sponsor-logo">Logo placeholder</div>
-              </div>
+          <h2 class="section-title social-heading">Social media</h2>
+          <div class="card" data-content="socialList">
+            <p><a class="social-link btn-disabled" href="#" aria-disabled="true">Instagram</a></p>
+            <p><a class="social-link btn-disabled" href="#" aria-disabled="true">Facebook</a></p>
+            <p><a class="social-link btn-disabled" href="#" aria-disabled="true">LinkedIn</a></p>
+          </div>
+          <h2 class="section-title sponsor-heading">Sponsors</h2>
+          <div class="card sponsor-card">
+            <div class="sponsor-grid" data-content="sponsors">
+              <div class="sponsor-logo">Logo placeholder</div>
+              <div class="sponsor-logo">Logo placeholder</div>
+              <div class="sponsor-logo">Logo placeholder</div>
+              <div class="sponsor-logo">Logo placeholder</div>
             </div>
           </div>
         </div>

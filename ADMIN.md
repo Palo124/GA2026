@@ -10,7 +10,7 @@ Editors can update the site content by editing a Google Sheet. **No account need
 2. **File → Import → Upload** and upload `content/sheet-template.csv`, or copy-paste the template structure manually.
 3. Ensure the first sheet tab has:
    - **Config section**: Rows with `key` and `value` (e.g. `hero.title`, `ESN General Assembly 2026`)
-   - **Section markers**: `[FAQ]`, `[DOCUMENTS]`, `[SPONSORS]` on their own rows to separate sections
+   - **Section markers**: `[FAQ]`, `[DOCUMENTS]`, `[SPONSORS]`, `[LOCALS_RECOMMEND]`, `[CONTACTS]`, `[SOCIAL]` on their own rows to separate sections
    - **FAQ**: `question` and `answer` columns
    - **Documents**: `title`, `description`, `url`, `linkText` columns
    - **Sponsors**: `name` column
@@ -48,7 +48,9 @@ useCorsProxy: true
 ## Format notes
 
 - **Arrays** (chips, about items): separate entries with semicolons (`;`), e.g. `chip1;chip2;chip3`
-- **FAQ / Documents / Sponsors**: one row per item; header row is required
+- **FAQ / Documents / Sponsors / Contacts**: one row per item; header row is required
+- **Contacts**: Use `[CONTACTS]` with columns: `picture`, `group`, `name`, `email`, `phone`. One row per person. Picture can be a URL or empty (shows initial). Legacy fallback: `contacts.ocEmail`, `contacts.venueContact`
+- **Social media**: Use `[SOCIAL]` with columns: `name`, `url`. One row per platform (e.g. Instagram, Facebook, LinkedIn). Legacy fallback: `social.instagram`, `social.facebook`, `social.linkedin`
 
 ## Fallback
 

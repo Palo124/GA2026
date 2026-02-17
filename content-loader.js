@@ -19,10 +19,14 @@
     for (var i = 0; i < text.length; i++) {
       var c = text[i];
       if (c === '"') inQuotes = !inQuotes;
-      else if (!inQuotes && (c === ',' || c === '\n' || c === '\r')) {
-        if (c !== '\r') row.push(cell.trim());
+      else if (!inQuotes && c === ',') {
+        row.push(cell.trim());
         cell = '';
-        if (c === '\n') { rows.push(row); row = []; }
+      } else if (!inQuotes && c === '\n') {
+        row.push(cell.trim());
+        rows.push(row);
+        row = [];
+        cell = '';
       } else if (c !== '\r') cell += c;
     }
     row.push(cell.trim());
@@ -43,7 +47,7 @@
     return fetchUrl(url).then(function (text) {
       if (!text) return null;
       var rows = parseCSV(text);
-      var data = { hero: {}, about: {}, venue: {}, contacts: {}, social: {}, practical: {}, footer: {}, faq: [], documents: [], sponsors: [], localsRecommend: [] };
+      var data = { hero: {}, about: {}, venue: {}, contacts: [], social: [], contactsLegacy: {}, socialLegacy: {}, practical: {}, footer: {}, faq: [], documents: [], sponsors: [], localsRecommend: [] };
       var section = 'config';
       var i;
       for (i = 0; i < rows.length; i++) {
@@ -54,6 +58,8 @@
         if (a0 === '[DOCUMENTS]') { section = 'documents'; continue; }
         if (a0 === '[SPONSORS]') { section = 'sponsors'; continue; }
         if (a0 === '[LOCALS_RECOMMEND]') { section = 'localsRecommend'; continue; }
+        if (a0 === '[CONTACTS]') { section = 'contacts'; continue; }
+        if (a0 === '[SOCIAL]') { section = 'social'; continue; }
         if (section === 'config' && a0 && a0 !== 'key') {
           if (a0 === 'hero.title') data.hero.title = a1;
           else if (a0 === 'hero.subtitle') data.hero.subtitle = a1;
@@ -70,11 +76,11 @@
           else if (a0 === 'venue.mapEmbedUrl') data.venue.mapEmbedUrl = a1;
           else if (a0 === 'venue.campusMapImage') data.venue.campusMapImage = a1;
           else if (a0 === 'venue.gettingThere') data.venue.gettingThere = a1;
-          else if (a0 === 'contacts.ocEmail') data.contacts.ocEmail = a1;
-          else if (a0 === 'contacts.venueContact') data.contacts.venueContact = a1;
-          else if (a0 === 'social.instagram') data.social.instagram = a1;
-          else if (a0 === 'social.facebook') data.social.facebook = a1;
-          else if (a0 === 'social.linkedin') data.social.linkedin = a1;
+          else if (a0 === 'contacts.ocEmail') data.contactsLegacy.ocEmail = a1;
+          else if (a0 === 'contacts.venueContact') data.contactsLegacy.venueContact = a1;
+          else if (a0 === 'social.instagram') data.socialLegacy.instagram = a1;
+          else if (a0 === 'social.facebook') data.socialLegacy.facebook = a1;
+          else if (a0 === 'social.linkedin') data.socialLegacy.linkedin = a1;
           else if (a0 === 'practical.accommodation') data.practical.accommodation = a1;
           else if (a0 === 'practical.foodDietary') data.practical.foodDietary = a1;
           else if (a0 === 'practical.accessibility') data.practical.accessibility = a1;
@@ -90,6 +96,16 @@
           data.sponsors.push({ name: a0, logoUrl: (a1 || '').trim(), url: (r[2] || '').trim() });
         } else if (section === 'localsRecommend' && a0 !== 'name' && a0) {
           data.localsRecommend.push({ name: a0, description: a1, category: (r[2] || '').trim(), url: (r[3] || '#').trim(), linkText: (r[4] || 'View on map').trim() });
+        } else if (section === 'contacts' && a0 !== 'picture' && (a0 || a1 || r[2] || r[3] || r[4])) {
+          data.contacts.push({
+            picture: (a0 || '').trim(),
+            group: (a1 || '').trim(),
+            name: (r[2] || '').trim(),
+            email: (r[3] || '').trim(),
+            phone: (r[4] || '').trim()
+          });
+        } else if (section === 'social' && a0 !== 'name' && a0) {
+          data.social.push({ name: a0, url: (a1 || '#').trim() });
         }
       }
       return data;
@@ -155,16 +171,52 @@
     }
 
     var contacts = data.contacts;
-    if (contacts) {
-      setText(document.querySelector('[data-content="contacts.ocEmail"]'), contacts.ocEmail);
-      setText(document.querySelector('[data-content="contacts.venueContact"]'), contacts.venueContact);
+    var contactListEl = document.querySelector('[data-content="contactsList"]');
+    if (Array.isArray(contacts) && contacts.length === 0 && (data.contactsLegacy.ocEmail || data.contactsLegacy.venueContact)) {
+      contacts = [
+        { picture: '', group: 'Organising Committee', name: '', email: data.contactsLegacy.ocEmail || '', phone: '' },
+        { picture: '', group: 'Venue Contact', name: '', email: data.contactsLegacy.venueContact || '', phone: '' }
+      ];
+    }
+    if (Array.isArray(contacts) && contacts.length > 0 && contactListEl) {
+      contactListEl.innerHTML = contacts.map(function (c) {
+        var picture = (c.picture || '').trim();
+        var group = (c.group || '').replace(/</g, '&lt;');
+        var name = (c.name || '').replace(/</g, '&lt;');
+        var email = (c.email || '').replace(/</g, '&lt;');
+        var phone = (c.phone || '').replace(/</g, '&lt;');
+        var imgHtml = picture
+          ? '<img src="' + (picture + '').replace(/"/g, '&quot;') + '" alt="" loading="lazy" class="contact-avatar-img" />'
+          : '<span class="contact-avatar-placeholder" aria-hidden="true">' + (name ? name.charAt(0).toUpperCase() : '?') + '</span>';
+        var emailHtml = email ? '<a href="mailto:' + (email + '').replace(/"/g, '&quot;') + '">' + email + '</a>' : '';
+        var phoneHtml = phone ? '<a href="tel:' + (phone + '').replace(/[^0-9+]/g, '') + '">' + phone + '</a>' : '';
+        return '<li class="contact-item">' +
+          '<div class="contact-avatar">' + imgHtml + '</div>' +
+          '<div class="contact-details">' +
+          '<span class="contact-group">' + group + '</span>' +
+          '<span class="contact-name">' + name + '</span>' +
+          (emailHtml ? '<span class="contact-email">' + emailHtml + '</span>' : '') +
+          (phoneHtml ? '<span class="contact-phone">' + phoneHtml + '</span>' : '') +
+          '</div></li>';
+      }).join('');
     }
 
     var social = data.social;
-    if (social) {
-      setText(document.querySelector('[data-content="social.instagram"]'), social.instagram);
-      setText(document.querySelector('[data-content="social.facebook"]'), social.facebook);
-      setText(document.querySelector('[data-content="social.linkedin"]'), social.linkedin);
+    var socialListEl = document.querySelector('[data-content="socialList"]');
+    if (Array.isArray(social) && social.length === 0 && (data.socialLegacy.instagram || data.socialLegacy.facebook || data.socialLegacy.linkedin)) {
+      social = [
+        { name: 'Instagram', url: data.socialLegacy.instagram || '#' },
+        { name: 'Facebook', url: data.socialLegacy.facebook || '#' },
+        { name: 'LinkedIn', url: data.socialLegacy.linkedin || '#' }
+      ];
+    }
+    if (Array.isArray(social) && social.length > 0 && socialListEl) {
+      socialListEl.innerHTML = social.map(function (s) {
+        var name = (s.name || '').replace(/</g, '&lt;');
+        var url = (s.url || '#').trim();
+        var attrs = url === '#' ? 'class="social-link btn-disabled" href="#" aria-disabled="true"' : 'class="social-link" href="' + (url + '').replace(/"/g, '&quot;') + '" target="_blank" rel="noopener"';
+        return '<p><a ' + attrs + '>' + name + '</a></p>';
+      }).join('');
     }
 
     var sponsors = data.sponsors;
