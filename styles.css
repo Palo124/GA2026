@@ -169,20 +169,25 @@ a {
   cursor: not-allowed;
 }
 
-/* Navigation – sticky so hamburger menu is always reachable when scrolling */
+/* Navigation – sticky wrapper keeps nav pinned across full-page scroll */
 header {
   width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--esn-white);
 }
 
 .nav {
-  position: sticky;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: relative;
   width: 100%;
-  z-index: 100;
   background: var(--esn-white);
   border-bottom: 1px solid var(--esn-gray-100);
+}
+
+/* Defensive override: keep nav visible even if legacy JS toggles nav-hidden */
+.nav.nav-hidden {
+  transform: none !important;
 }
 
 .nav-inner {
