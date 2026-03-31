@@ -3,7 +3,9 @@
   var html5QrCode = null;
   var scannerActive = false;
   var lookupInFlight = false;
+  var scanLock = false;
   var lastHandledId = '';
+  var resultCache = {};
 
   var elements = {
     modePill: document.getElementById('mode-pill'),
@@ -121,7 +123,38 @@
     return url.toString();
   }
 
+  function getReaderSize() {
+    var reader = document.getElementById('reader');
+    var width = reader ? reader.clientWidth : 320;
+    var height = reader ? reader.clientHeight : 320;
+    return {
+      width: width || 320,
+      height: height || 320
+    };
+  }
+
+  function getQrBoxSize() {
+    var size = getReaderSize();
+    var edge = Math.floor(Math.min(size.width, size.height) * 0.68);
+    return {
+      width: Math.max(180, Math.min(edge, 280)),
+      height: Math.max(180, Math.min(edge, 280))
+    };
+  }
+
+  function getVideoConstraints() {
+    return {
+      facingMode: 'environment',
+      width: { ideal: 1280 },
+      height: { ideal: 720 }
+    };
+  }
+
   function fetchParticipant(participantId) {
+    if (resultCache[participantId]) {
+      return Promise.resolve(resultCache[participantId]);
+    }
+
     if (config.apiBaseUrl) {
       return fetch(buildLookupUrl(participantId), {
         method: 'GET',
@@ -131,11 +164,15 @@
           throw new Error('Backend request failed with status ' + response.status + '.');
         }
         return response.json();
+      }).then(function (data) {
+        if (data && data.found) resultCache[participantId] = data;
+        return data;
       });
     }
 
     if (config.useMockData) {
       var mock = config.mockData && config.mockData[participantId];
+      if (mock && mock.found) resultCache[participantId] = mock;
       return Promise.resolve(mock || { found: false, participantId: participantId });
     }
 
@@ -182,14 +219,14 @@
 
   function onScanSuccess(decodedText) {
     var normalizedId = normalizeParticipantId(decodedText);
-    if (!normalizedId || normalizedId === lastHandledId) return;
+    if (!normalizedId || normalizedId === lastHandledId || scanLock) return;
 
-    stopScanner()
-      .catch(function () {})
-      .finally(function () {
-        elements.scanAgainButton.hidden = false;
-        handleLookup(normalizedId, 'scanner');
-      });
+    scanLock = true;
+    lastHandledId = normalizedId;
+    elements.scanAgainButton.hidden = false;
+    setStatus('QR detected. Looking up ' + normalizedId + '...', null);
+    handleLookup(normalizedId, 'scanner');
+    stopScanner().catch(function () {});
   }
 
   function onScanFailure() {}
@@ -224,9 +261,11 @@
         return html5QrCode.start(
           camera.id,
           {
-            fps: 10,
-            qrbox: { width: 240, height: 240 },
-            aspectRatio: 1
+            fps: 20,
+            qrbox: getQrBoxSize(),
+            aspectRatio: 1,
+            disableFlip: true,
+            videoConstraints: getVideoConstraints()
           },
           onScanSuccess,
           onScanFailure
@@ -234,12 +273,14 @@
       })
       .then(function () {
         scannerActive = true;
+        scanLock = false;
         elements.scanAgainButton.hidden = true;
         setButtonState();
-        setStatus('Camera active. Point it at a participant QR code.', null);
+        setStatus('Camera active. Hold the QR inside the frame.', null);
       })
       .catch(function (error) {
         scannerActive = false;
+        scanLock = false;
         setButtonState();
         setStatus(
           (error && error.message) || 'Camera access failed. Try manual lookup instead.',
@@ -251,6 +292,7 @@
   function stopScanner() {
     if (!html5QrCode || !scannerActive) {
       scannerActive = false;
+      scanLock = false;
       setButtonState();
       return Promise.resolve();
     }
@@ -259,11 +301,13 @@
       .stop()
       .then(function () {
         scannerActive = false;
+        scanLock = false;
         setButtonState();
         setStatus('Camera stopped.', null);
       })
       .catch(function () {
         scannerActive = false;
+        scanLock = false;
         setButtonState();
       });
   }
@@ -278,6 +322,7 @@
     });
 
     elements.scanAgainButton.addEventListener('click', function () {
+      scanLock = false;
       lastHandledId = '';
       clearResult();
       startScanner();
