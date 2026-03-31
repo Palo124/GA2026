@@ -44,6 +44,19 @@
         <button id="stop-scan" class="btn btn-secondary" type="button" disabled>Stop camera</button>
         <button id="scan-again" class="btn btn-secondary" type="button" hidden>Scan again</button>
       </div>
+
+      <div class="gallery-import">
+        <label class="input-label" for="qr-image-input">Import QR from gallery</label>
+        <input
+          id="qr-image-input"
+          class="file-input"
+          type="file"
+          accept="image/*"
+        />
+        <p class="muted gallery-hint">
+          Choose a photo or screenshot that clearly contains one QR code.
+        </p>
+      </div>
     </section>
 
     <section class="panel">

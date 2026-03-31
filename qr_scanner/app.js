@@ -13,6 +13,7 @@
     startButton: document.getElementById('start-scan'),
     stopButton: document.getElementById('stop-scan'),
     scanAgainButton: document.getElementById('scan-again'),
+    qrImageInput: document.getElementById('qr-image-input'),
     lookupForm: document.getElementById('lookup-form'),
     manualId: document.getElementById('manual-id'),
     resultPanel: document.getElementById('result-panel'),
@@ -217,6 +218,45 @@
       });
   }
 
+  function scanSelectedImage(file) {
+    if (!file) return;
+    if (typeof Html5Qrcode === 'undefined') {
+      setStatus('The QR scanner library did not load. Check your internet connection.', 'error');
+      return;
+    }
+
+    html5QrCode = html5QrCode || new Html5Qrcode('reader');
+    setStatus('Reading QR from selected image...', null);
+    scanLock = true;
+
+    stopScanner()
+      .catch(function () {})
+      .finally(function () {
+        html5QrCode.scanFile(file, true)
+          .then(function (decodedText) {
+            var normalizedId = normalizeParticipantId(decodedText);
+            if (!normalizedId) {
+              throw new Error('The selected image did not contain a participant QR code.');
+            }
+
+            lastHandledId = normalizedId;
+            elements.scanAgainButton.hidden = false;
+            setStatus('QR detected in image. Looking up ' + normalizedId + '...', null);
+            handleLookup(normalizedId, 'gallery image');
+          })
+          .catch(function (error) {
+            scanLock = false;
+            setStatus(
+              (error && error.message) || 'Could not read a QR code from the selected image.',
+              'error'
+            );
+          })
+          .finally(function () {
+            if (elements.qrImageInput) elements.qrImageInput.value = '';
+          });
+      });
+  }
+
   function onScanSuccess(decodedText) {
     var normalizedId = normalizeParticipantId(decodedText);
     if (!normalizedId || normalizedId === lastHandledId || scanLock) return;
@@ -332,6 +372,11 @@
       event.preventDefault();
       lastHandledId = '';
       handleLookup(elements.manualId.value, 'manual search');
+    });
+
+    elements.qrImageInput.addEventListener('change', function (event) {
+      var file = event.target.files && event.target.files[0];
+      scanSelectedImage(file);
     });
   }
 
