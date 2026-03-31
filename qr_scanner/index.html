@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Participant Diet Scanner</title>
+  <meta
+    name="description"
+    content="Scan participant QR codes and show food choice and dietary information."
+  />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section class="hero-card">
+      <p class="eyebrow">Event Checkpoint</p>
+      <h1>Participant Diet Scanner</h1>
+      <p class="hero-copy">
+        Scan a participant QR code to load their meal choice and dietary description from Google
+        Sheets.
+      </p>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <div>
+          <h2>Camera Scanner</h2>
+          <p class="muted">Best on smartphone with the rear camera.</p>
+        </div>
+        <span id="mode-pill" class="mode-pill">Checking setup...</span>
+      </div>
+
+      <div id="status-banner" class="status-banner" role="status" aria-live="polite">
+        Ready to scan.
+      </div>
+
+      <div id="reader" class="reader" aria-label="QR code camera preview"></div>
+
+      <div class="scanner-actions">
+        <button id="start-scan" class="btn btn-primary" type="button">Start camera</button>
+        <button id="stop-scan" class="btn btn-secondary" type="button" disabled>Stop camera</button>
+        <button id="scan-again" class="btn btn-secondary" type="button" hidden>Scan again</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <div>
+          <h2>Manual Lookup</h2>
+          <p class="muted">Use this if scanning is unavailable or a badge is damaged.</p>
+        </div>
+      </div>
+
+      <form id="lookup-form" class="lookup-form">
+        <label class="input-label" for="manual-id">Participant ID</label>
+        <div class="lookup-row">
+          <input
+            id="manual-id"
+            name="participantId"
+            class="text-input"
+            type="text"
+            placeholder="Example: GA26-001"
+            autocomplete="off"
+            autocapitalize="characters"
+            spellcheck="false"
+          />
+          <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="result-panel" class="panel result-panel is-empty" aria-live="polite">
+      <div class="panel-heading">
+        <div>
+          <h2>Participant Result</h2>
+          <p class="muted">The latest scanned or searched participant appears here.</p>
+        </div>
+      </div>
+
+      <div id="result-empty" class="empty-state">
+        No participant loaded yet. Scan a QR code or search by ID.
+      </div>
+
+      <div id="result-content" class="result-content" hidden>
+        <div class="result-header">
+          <p class="result-kicker">Participant</p>
+          <h3 id="result-name">-</h3>
+          <p id="result-id" class="result-id">-</p>
+        </div>
+
+        <dl id="result-fields" class="result-fields"></dl>
+      </div>
+    </section>
+
+    <section class="panel small-print">
+      <h2>QR Format</h2>
+      <p>
+        Recommended QR payload: plain participant ID like <code>GA26-001</code>. This app also
+        accepts links containing <code>?participantId=GA26-001</code>.
+      </p>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/html5-qrcode" defer></script>
+  <script src="./config.js" defer></script>
+  <script src="./app.js" defer></script>
+</body>
+</html>
