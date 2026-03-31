@@ -42,6 +42,36 @@
     return fetch(url).then(function (r) { return r.ok ? r.text() : null; });
   }
 
+  function toDriveImageUrl(url) {
+    var value = (url || '').trim();
+    var match;
+    if (!value) return '';
+
+    match = value.match(/^https?:\/\/drive\.google\.com\/file\/d\/([^/]+)/i);
+    if (!match) match = value.match(/[?&]id=([^&]+)/i);
+    if (!match && /^[a-zA-Z0-9_-]{20,}$/.test(value)) match = [value, value];
+
+    if (match && match[1]) {
+      return 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(match[1]) + '&sz=w256';
+    }
+
+    return value;
+  }
+
+  function getSocialIcon(name) {
+    var key = (name || '').trim().toLowerCase();
+    if (key === 'instagram') {
+      return '<svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"></rect><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"></circle><circle cx="17.5" cy="6.5" r="1.25" fill="currentColor"></circle></svg>';
+    }
+    if (key === 'facebook') {
+      return '<svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 21v-7h2.6l.4-3h-3V9.1c0-.9.3-1.6 1.6-1.6h1.5V4.8c-.3 0-1.2-.1-2.3-.1-2.3 0-3.8 1.4-3.8 4V11H8v3h2.5v7h3z" fill="currentColor"></path></svg>';
+    }
+    if (key === 'linkedin') {
+      return '<svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.9 8.5a1.8 1.8 0 1 1 0-3.6 1.8 1.8 0 0 1 0 3.6zM5.3 10.2h3.1V20H5.3zM10.2 10.2h3v1.3h.1c.4-.8 1.4-1.6 2.9-1.6 3.1 0 3.7 2 3.7 4.7V20h-3.1v-4.8c0-1.1 0-2.6-1.6-2.6s-1.8 1.2-1.8 2.5V20h-3.1z" fill="currentColor"></path></svg>';
+    }
+    return '<svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h11A2.5 2.5 0 0 1 20 7.5v9a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 16.5zm2.2-.5L12 11.3 17.8 7zM18 8.4l-5.4 4a1 1 0 0 1-1.2 0L6 8.4v8.1c0 .3.2.5.5.5h11c.3 0 .5-.2.5-.5z" fill="currentColor"></path></svg>';
+  }
+
   function loadFromSheet(cfg) {
     var url = cfg.sheetUrl || ('https://docs.google.com/spreadsheets/d/' + cfg.sheetId + '/pub?output=csv&gid=' + (cfg.gid || 0));
     return fetchUrl(url).then(function (text) {
@@ -180,18 +210,20 @@
     }
     if (Array.isArray(contacts) && contacts.length > 0 && contactListEl) {
       contactListEl.innerHTML = contacts.map(function (c) {
-        var picture = (c.picture || '').trim();
+        var picture = toDriveImageUrl(c.picture);
         var group = (c.group || '').replace(/</g, '&lt;');
-        var name = (c.name || '').replace(/</g, '&lt;');
+        var rawName = (c.name || '').trim();
+        var name = rawName.replace(/</g, '&lt;');
         var email = (c.email || '').replace(/</g, '&lt;');
         var phone = (c.phone || '').replace(/</g, '&lt;');
+        var fallbackInitial = (rawName ? rawName.charAt(0).toUpperCase() : '?').replace(/</g, '&lt;');
         var imgHtml = picture
           ? '<img src="' + (picture + '').replace(/"/g, '&quot;') + '" alt="" loading="lazy" class="contact-avatar-img" />'
-          : '<span class="contact-avatar-placeholder" aria-hidden="true">' + (name ? name.charAt(0).toUpperCase() : '?') + '</span>';
+          : '<span class="contact-avatar-placeholder" aria-hidden="true">' + fallbackInitial + '</span>';
         var emailHtml = email ? '<a href="mailto:' + (email + '').replace(/"/g, '&quot;') + '">' + email + '</a>' : '';
         var phoneHtml = phone ? '<a href="tel:' + (phone + '').replace(/[^0-9+]/g, '') + '">' + phone + '</a>' : '';
         return '<li class="contact-item">' +
-          '<div class="contact-avatar">' + imgHtml + '</div>' +
+          '<div class="contact-avatar" data-fallback-initial="' + fallbackInitial.replace(/"/g, '&quot;') + '">' + imgHtml + '</div>' +
           '<div class="contact-details">' +
           '<span class="contact-group">' + group + '</span>' +
           '<span class="contact-name">' + name + '</span>' +
@@ -199,6 +231,15 @@
           (phoneHtml ? '<span class="contact-phone">' + phoneHtml + '</span>' : '') +
           '</div></li>';
       }).join('');
+
+      Array.prototype.forEach.call(contactListEl.querySelectorAll('.contact-avatar-img'), function (img) {
+        img.addEventListener('error', function () {
+          var avatar = img.parentNode;
+          var initial = avatar && avatar.getAttribute('data-fallback-initial');
+          if (!avatar) return;
+          avatar.innerHTML = '<span class="contact-avatar-placeholder" aria-hidden="true">' + (initial || '?') + '</span>';
+        }, { once: true });
+      });
     }
 
     var social = data.social;
@@ -212,10 +253,11 @@
     }
     if (Array.isArray(social) && social.length > 0 && socialListEl) {
       socialListEl.innerHTML = social.map(function (s) {
-        var name = (s.name || '').replace(/</g, '&lt;');
+        var rawName = (s.name || '').trim();
+        var name = rawName.replace(/</g, '&lt;');
         var url = (s.url || '#').trim();
         var attrs = url === '#' ? 'class="social-link btn-disabled" href="#" aria-disabled="true"' : 'class="social-link" href="' + (url + '').replace(/"/g, '&quot;') + '" target="_blank" rel="noopener"';
-        return '<p><a ' + attrs + '>' + name + '</a></p>';
+        return '<p><a ' + attrs + '>' + getSocialIcon(rawName) + '<span>' + name + '</span></a></p>';
       }).join('');
     }
 

@@ -579,15 +579,6 @@ details[open] summary::after {
   margin: 1.2rem 0 0.6rem;
 }
 
-.social-link {
-  color: var(--esn-cyan);
-  font-weight: 600;
-}
-
-.social-link:not(.btn-disabled):hover {
-  text-decoration: underline;
-}
-
 /* Contact list – round picture, group, name, email, phone */
 .contact-list {
   list-style: none;
@@ -664,6 +655,24 @@ details[open] summary::after {
 .contact-email a:hover,
 .contact-phone a:hover {
   text-decoration: underline;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--esn-cyan);
+  font-weight: 600;
+}
+
+.social-link:hover {
+  text-decoration: underline;
+}
+
+.social-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex-shrink: 0;
 }
 
 .sponsor-logo {
