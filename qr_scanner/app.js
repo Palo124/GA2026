@@ -6,6 +6,7 @@
   var scanLock = false;
   var lastHandledId = '';
   var resultCache = {};
+  var selectedImageFile = null;
 
   var elements = {
     modePill: document.getElementById('mode-pill'),
@@ -13,6 +14,7 @@
     startButton: document.getElementById('start-scan'),
     stopButton: document.getElementById('stop-scan'),
     scanAgainButton: document.getElementById('scan-again'),
+    scanGalleryButton: document.getElementById('scan-gallery'),
     qrImageInput: document.getElementById('qr-image-input'),
     lookupForm: document.getElementById('lookup-form'),
     manualId: document.getElementById('manual-id'),
@@ -46,6 +48,10 @@
   function setButtonState() {
     elements.startButton.disabled = scannerActive || typeof Html5Qrcode === 'undefined';
     elements.stopButton.disabled = !scannerActive;
+    if (elements.scanGalleryButton) {
+      elements.scanGalleryButton.disabled =
+        !selectedImageFile || lookupInFlight || scanLock || typeof Html5Qrcode === 'undefined';
+    }
   }
 
   function clearResult() {
@@ -215,6 +221,7 @@
       })
       .finally(function () {
         lookupInFlight = false;
+        setButtonState();
       });
   }
 
@@ -252,7 +259,9 @@
             );
           })
           .finally(function () {
+            selectedImageFile = null;
             if (elements.qrImageInput) elements.qrImageInput.value = '';
+            setButtonState();
           });
       });
   }
@@ -375,8 +384,15 @@
     });
 
     elements.qrImageInput.addEventListener('change', function (event) {
-      var file = event.target.files && event.target.files[0];
-      scanSelectedImage(file);
+      selectedImageFile = event.target.files && event.target.files[0] ? event.target.files[0] : null;
+      setButtonState();
+      if (selectedImageFile) {
+        setStatus('Image selected. Tap "Scan selected image" to start.', null);
+      }
+    });
+
+    elements.scanGalleryButton.addEventListener('click', function () {
+      scanSelectedImage(selectedImageFile);
     });
   }
 
