@@ -3,6 +3,8 @@
  * Configure sheet-config.js with your Google Sheet ID to use Sheets.
  */
 (function () {
+  var agendaCalendarUrl = '';
+
   function setText(el, text) {
     if (el && text != null) el.textContent = text;
   }
@@ -109,6 +111,201 @@
       if (!child.hidden) hasVisible = true;
     });
     el.hidden = !hasVisible;
+  }
+
+  function pad2(value) {
+    return String(value).padStart(2, '0');
+  }
+
+  function inferAgendaYear(data) {
+    var hero = (data && data.hero) || {};
+    var chips = Array.isArray(hero.chips) ? hero.chips : [];
+    var sources = [];
+    var match;
+    var i;
+
+    for (i = 0; i < chips.length; i++) {
+      sources.push(chips[i] && (chips[i].value != null ? chips[i].value : chips[i]));
+    }
+    sources.push(hero.title);
+
+    for (i = 0; i < sources.length; i++) {
+      match = ((sources[i] || '') + '').match(/\b(20\d{2})\b/);
+      if (match) return parseInt(match[1], 10);
+    }
+
+    return 2026;
+  }
+
+  function parseAgendaDate(dayLabel, fallbackYear) {
+    var months = {
+      jan: 1, january: 1,
+      feb: 2, february: 2,
+      mar: 3, march: 3,
+      apr: 4, april: 4,
+      may: 5,
+      jun: 6, june: 6,
+      jul: 7, july: 7,
+      aug: 8, august: 8,
+      sep: 9, sept: 9, september: 9,
+      oct: 10, october: 10,
+      nov: 11, november: 11,
+      dec: 12, december: 12
+    };
+    var value = ((dayLabel || '') + '').replace(/,/g, ' ').trim();
+    var match = value.match(/(?:^|\s)(\d{1,2})\s+([A-Za-z]+)(?:\s+(20\d{2}))?/);
+    var day;
+    var monthKey;
+    var year;
+
+    if (!match) return null;
+
+    day = parseInt(match[1], 10);
+    monthKey = match[2].toLowerCase();
+    year = match[3] ? parseInt(match[3], 10) : fallbackYear;
+    if (!months[monthKey]) monthKey = monthKey.slice(0, 3);
+    if (!months[monthKey]) return null;
+
+    return {
+      year: year,
+      month: months[monthKey],
+      day: day
+    };
+  }
+
+  function parseAgendaTime(timeLabel) {
+    var value = ((timeLabel || '') + '').trim();
+    var match = value.match(/^(\d{1,2}):(\d{2})$/);
+    if (!match) return null;
+    return {
+      hours: parseInt(match[1], 10),
+      minutes: parseInt(match[2], 10)
+    };
+  }
+
+  function formatIcsDate(date) {
+    return String(date.year) + pad2(date.month) + pad2(date.day);
+  }
+
+  function formatIcsDateTime(date, time) {
+    return formatIcsDate(date) + 'T' + pad2(time.hours) + pad2(time.minutes) + '00';
+  }
+
+  function addMinutes(time, minutesToAdd) {
+    var total = time.hours * 60 + time.minutes + minutesToAdd;
+    return {
+      hours: Math.floor(total / 60),
+      minutes: total % 60
+    };
+  }
+
+  function nextDate(date) {
+    var jsDate = new Date(date.year, date.month - 1, date.day);
+    jsDate.setDate(jsDate.getDate() + 1);
+    return {
+      year: jsDate.getFullYear(),
+      month: jsDate.getMonth() + 1,
+      day: jsDate.getDate()
+    };
+  }
+
+  function escapeIcsText(value) {
+    return ((value || '') + '')
+      .replace(/\\/g, '\\\\')
+      .replace(/\n/g, '\\n')
+      .replace(/,/g, '\\,')
+      .replace(/;/g, '\\;');
+  }
+
+  function createAgendaCalendar(data, agendaItems) {
+    var year = inferAgendaYear(data);
+    var venueList = filterVisible(data && data.venues);
+    var venue = (data && data.venue) || {};
+    var firstVenue = venueList[0] || null;
+    var locationParts = [];
+    var lines = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//ESN GA 2026//EN',
+      'NAME:ESN General Assembly 2026',
+      'X-WR-CALNAME:ESN General Assembly 2026',
+      'X-WR-TIMEZONE:Europe/Prague',
+      'BEGIN:VTIMEZONE',
+      'TZID:Europe/Prague',
+      'BEGIN:STANDARD',
+      'DTSTART:20251026T030000',
+      'TZOFFSETFROM:+0200',
+      'TZOFFSETTO:+0100',
+      'TZNAME:CET',
+      'END:STANDARD',
+      'BEGIN:DAYLIGHT',
+      'DTSTART:20260329T020000',
+      'TZOFFSETFROM:+0100',
+      'TZOFFSETTO:+0200',
+      'TZNAME:CEST',
+      'END:DAYLIGHT',
+      'END:VTIMEZONE'
+    ];
+    var dtStamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z');
+    var i;
+
+    if (firstVenue) {
+      locationParts = [firstVenue.name, firstVenue.addressLine1, firstVenue.addressLine2, firstVenue.cityPostal].filter(Boolean);
+    } else {
+      locationParts = [venue.venueName, venue.addressLine1, venue.addressLine2, venue.cityPostal].filter(Boolean);
+    }
+
+    for (i = 0; i < agendaItems.length; i++) {
+      var item = agendaItems[i];
+      var parsedDate = parseAgendaDate(item.day, year);
+      var parsedTime = parseAgendaTime(item.time);
+      var nextItem = agendaItems[i + 1];
+      var nextTime = nextItem && nextItem.day === item.day ? parseAgendaTime(nextItem.time) : null;
+      var uidBase;
+
+      if (!parsedDate) continue;
+
+      uidBase = formatIcsDate(parsedDate) + '-' + ((item.title || 'event').toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'event') + '-' + i;
+      lines.push('BEGIN:VEVENT');
+      lines.push('UID:' + uidBase + '@esn');
+      lines.push('DTSTAMP:' + dtStamp);
+
+      if (!parsedTime) {
+        lines.push('DTSTART;VALUE=DATE:' + formatIcsDate(parsedDate));
+        lines.push('DTEND;VALUE=DATE:' + formatIcsDate(nextDate(parsedDate)));
+      } else {
+        lines.push('DTSTART;TZID=Europe/Prague:' + formatIcsDateTime(parsedDate, parsedTime));
+        lines.push('DTEND;TZID=Europe/Prague:' + formatIcsDateTime(parsedDate, nextTime || addMinutes(parsedTime, 60)));
+      }
+
+      lines.push('SUMMARY:' + escapeIcsText(item.title || 'Agenda item'));
+      if (locationParts.length) lines.push('LOCATION:' + escapeIcsText(locationParts.join(', ')));
+      if (item.description) lines.push('DESCRIPTION:' + escapeIcsText(item.description));
+      lines.push('END:VEVENT');
+    }
+
+    lines.push('END:VCALENDAR');
+    return lines.join('\r\n');
+  }
+
+  function setAgendaCalendarDownload(data, agendaItems) {
+    var link = document.querySelector('.agenda-controls a[download]');
+    if (!link) return;
+
+    if (agendaCalendarUrl) {
+      URL.revokeObjectURL(agendaCalendarUrl);
+      agendaCalendarUrl = '';
+    }
+
+    if (!agendaItems.length) {
+      link.setAttribute('href', 'ga2026.ics');
+      link.setAttribute('download', 'ga2026.ics');
+      return;
+    }
+
+    agendaCalendarUrl = URL.createObjectURL(new Blob([createAgendaCalendar(data, agendaItems)], { type: 'text/calendar;charset=utf-8' }));
+    link.setAttribute('href', agendaCalendarUrl);
+    link.setAttribute('download', 'ga2026.ics');
   }
 
   function loadFromSheet(cfg) {
@@ -324,6 +521,7 @@
           '</details>';
       }).join('');
     }
+    setAgendaCalendarDownload(data, agendaItems);
     setSectionHidden('agenda', sectionIsHidden('agenda') || (rawAgendaItems.length > 0 && agendaItems.length === 0));
 
     var venue = data.venue;
