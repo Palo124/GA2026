@@ -25,11 +25,11 @@
     "intro": "Schedule is indicative and subject to change. Times are placeholders.",
     "icsHidden": false,
     "items": [
-      { "day": "Wed 14 May", "time": "All day", "title": "Arrival & travel day", "description": "Placeholder", "hidden": false },
-      { "day": "Wed 14 May", "time": "18:00", "title": "Dinner", "description": "Placeholder", "hidden": false },
-      { "day": "Thu 15 May", "time": "All day", "title": "Registration", "description": "Placeholder", "hidden": false },
-      { "day": "Fri 16 May", "time": "09:00", "title": "Plenary", "description": "Placeholder", "hidden": false },
-      { "day": "Sun 18 May", "time": "20:00", "title": "Farewell Party", "description": "Placeholder", "hidden": false }
+      { "day": "Wed 14 May", "startTime": "All day", "endTime": "", "title": "Arrival & travel day", "description": "Placeholder", "hidden": false },
+      { "day": "Wed 14 May", "startTime": "18:00", "endTime": "19:00", "title": "Dinner", "description": "Placeholder", "hidden": false },
+      { "day": "Thu 15 May", "startTime": "All day", "endTime": "", "title": "Registration", "description": "Placeholder", "hidden": false },
+      { "day": "Fri 16 May", "startTime": "09:00", "endTime": "11:30", "title": "Plenary", "description": "Placeholder", "hidden": false },
+      { "day": "Sun 18 May", "startTime": "20:00", "endTime": "22:30", "title": "Farewell Party", "description": "Placeholder", "hidden": false }
     ]
   },
   "venue": {

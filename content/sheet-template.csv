@@ -36,12 +36,12 @@ footer.copyright,Copyright placeholder © 2026.
 footer.identityNote,ESN Visual Identity rules respected (fonts, colors, logo safe zones).
 
 [AGENDA]
-day,time,title,description,hidden
-Wed 14 May,All day,Arrival & travel day,Placeholder,FALSE
-Wed 14 May,18:00,Dinner,Placeholder,FALSE
-Thu 15 May,All day,Registration,Placeholder,FALSE
-Fri 16 May,09:00,Plenary,Placeholder,FALSE
-Sun 18 May,20:00,Farewell Party,Placeholder,FALSE
+day,startTime,endTime,title,description,hidden
+Wed 14 May,All day,,Arrival & travel day,Placeholder,FALSE
+Wed 14 May,18:00,19:00,Dinner,Placeholder,FALSE
+Thu 15 May,All day,,Registration,Placeholder,FALSE
+Fri 16 May,09:00,11:30,Plenary,Placeholder,FALSE
+Sun 18 May,20:00,22:30,Farewell Party,Placeholder,FALSE
 
 [VENUES]
 name,mapUrl,addressLine1,addressLine2,cityPostal,hidden

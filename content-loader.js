@@ -183,6 +183,14 @@
     };
   }
 
+  function isAgendaAllDay(value) {
+    return ((value || '') + '').trim().toLowerCase() === 'all day';
+  }
+
+  function looksLikeAgendaTime(value) {
+    return !!parseAgendaTime(value) || isAgendaAllDay(value);
+  }
+
   function formatIcsDate(date) {
     return String(date.year) + pad2(date.month) + pad2(date.day);
   }
@@ -258,9 +266,12 @@
     for (i = 0; i < agendaItems.length; i++) {
       var item = agendaItems[i];
       var parsedDate = parseAgendaDate(item.day, year);
-      var parsedTime = parseAgendaTime(item.time);
+      var startLabel = item.startTime || item.time || '';
+      var endLabel = item.endTime || '';
+      var parsedTime = parseAgendaTime(startLabel);
+      var parsedEndTime = parseAgendaTime(endLabel);
       var nextItem = agendaItems[i + 1];
-      var nextTime = nextItem && nextItem.day === item.day ? parseAgendaTime(nextItem.time) : null;
+      var nextTime = nextItem && nextItem.day === item.day ? parseAgendaTime(nextItem.startTime || nextItem.time) : null;
       var uidBase;
 
       if (!parsedDate) continue;
@@ -270,12 +281,12 @@
       lines.push('UID:' + uidBase + '@esn');
       lines.push('DTSTAMP:' + dtStamp);
 
-      if (!parsedTime) {
+      if (isAgendaAllDay(startLabel) || !parsedTime) {
         lines.push('DTSTART;VALUE=DATE:' + formatIcsDate(parsedDate));
         lines.push('DTEND;VALUE=DATE:' + formatIcsDate(nextDate(parsedDate)));
       } else {
         lines.push('DTSTART;TZID=Europe/Prague:' + formatIcsDateTime(parsedDate, parsedTime));
-        lines.push('DTEND;TZID=Europe/Prague:' + formatIcsDateTime(parsedDate, nextTime || addMinutes(parsedTime, 60)));
+        lines.push('DTEND;TZID=Europe/Prague:' + formatIcsDateTime(parsedDate, parsedEndTime || nextTime || addMinutes(parsedTime, 60)));
       }
 
       lines.push('SUMMARY:' + escapeIcsText(item.title || 'Agenda item'));
@@ -400,13 +411,15 @@
           else if (a0 === 'footer.line1') data.footer.line1 = a1;
           else if (a0 === 'footer.copyright') data.footer.copyright = a1;
           else if (a0 === 'footer.identityNote') data.footer.identityNote = a1;
-        } else if (section === 'agenda' && a0 !== 'day' && (a0 || a1 || r[2] || r[3] || r[4])) {
+        } else if (section === 'agenda' && a0 !== 'day' && (a0 || a1 || r[2] || r[3] || r[4] || r[5])) {
+          var hasExplicitEndTime = !!r[5] || looksLikeAgendaTime(r[2]);
           data.agenda.items.push({
             day: (a0 || '').trim(),
-            time: (a1 || '').trim(),
-            title: (r[2] || '').trim(),
-            description: (r[3] || '').trim(),
-            hidden: r[4]
+            startTime: (a1 || '').trim(),
+            endTime: hasExplicitEndTime ? (r[2] || '').trim() : '',
+            title: (hasExplicitEndTime ? (r[3] || '') : (r[2] || '')).trim(),
+            description: (hasExplicitEndTime ? (r[4] || '') : (r[3] || '')).trim(),
+            hidden: hasExplicitEndTime ? r[5] : r[4]
           });
         } else if (section === 'faq' && a0 !== 'question' && (a0 || a1 || r[2])) {
           data.faq.push({ question: a0, answer: a1, hidden: r[2] });
@@ -503,11 +516,13 @@
         var dayLabel = group.day.replace(/</g, '&lt;');
         var accentClass = ['agenda-accent-cyan', 'agenda-accent-orange', 'agenda-accent-magenta', 'agenda-accent-green'][index % 4];
         var itemsHtml = group.items.map(function (item) {
-          var time = (item.time || '').replace(/</g, '&lt;');
+          var startTime = (item.startTime || item.time || '').replace(/</g, '&lt;');
+          var endTime = (item.endTime || '').replace(/</g, '&lt;');
+          var timeLabel = startTime && endTime ? startTime + ' - ' + endTime : startTime;
           var title = (item.title || '').replace(/</g, '&lt;');
           var description = (item.description || '').replace(/</g, '&lt;');
           return '<li class="agenda-list-item">' +
-            '<span class="agenda-item-time">' + time + '</span>' +
+            '<span class="agenda-item-time">' + timeLabel + '</span>' +
             '<div class="agenda-item-body">' +
             '<span class="agenda-item-title">' + title + '</span>' +
             (description ? '<span class="agenda-item-description">' + description + '</span>' : '') +
