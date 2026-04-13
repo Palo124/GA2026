@@ -13,6 +13,7 @@
   --radius-lg: 16px;
   --radius-md: 12px;
   --container: 1100px;
+  --anchor-offset: 96px;
 }
 
 * {
@@ -25,6 +26,15 @@ body {
   color: var(--esn-dark-blue);
   background: var(--esn-gray-50);
   line-height: 1.6;
+}
+
+html {
+  scroll-padding-top: var(--anchor-offset);
+}
+
+section[id],
+.hero[id] {
+  scroll-margin-top: var(--anchor-offset);
 }
 
 h1,
@@ -861,6 +871,10 @@ details[open] summary::after {
 }
 
 @media (min-width: 768px) {
+  :root {
+    --anchor-offset: 84px;
+  }
+
   .nav-toggle {
     display: none;
   }
