@@ -23,6 +23,7 @@
   "agenda": {
     "title": "Agenda",
     "intro": "Schedule is indicative and subject to change. Times are placeholders.",
+    "icsHidden": false,
     "items": [
       { "day": "Wed 14 May", "time": "All day", "title": "Arrival & travel day", "description": "Placeholder", "hidden": false },
       { "day": "Wed 14 May", "time": "18:00", "title": "Dinner", "description": "Placeholder", "hidden": false },

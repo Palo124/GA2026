@@ -319,6 +319,7 @@
         agenda: {
           title: 'Agenda',
           intro: 'Schedule is indicative and subject to change. Times are placeholders.',
+          icsHidden: false,
           items: []
         },
         venue: {},
@@ -370,6 +371,7 @@
           else if (a0 === 'about.hidden') data.sections.about.hidden = isHidden(a1);
           else if (a0 === 'agenda.title') data.agenda.title = a1;
           else if (a0 === 'agenda.intro') data.agenda.intro = a1;
+          else if (a0 === 'agenda.icsHidden') data.agenda.icsHidden = isHidden(a1);
           else if (a0 === 'agenda.hidden') data.sections.agenda.hidden = isHidden(a1);
           else if (a0 === 'venue.title') data.venue.title = a1;
           else if (a0 === 'venue.venueName') data.venue.venueName = a1;
@@ -481,6 +483,8 @@
     var agenda = data.agenda || {};
     setText(document.querySelector('[data-content="agenda.title"]'), agenda.title);
     setText(document.querySelector('[data-content="agenda.intro"]'), agenda.intro);
+    var agendaControlsEl = document.querySelector('.agenda-controls');
+    if (agendaControlsEl) agendaControlsEl.hidden = isHidden(agenda.icsHidden);
     var rawAgendaItems = Array.isArray(agenda.items) ? agenda.items : [];
     var agendaItems = filterVisible(rawAgendaItems);
     var agendaDaysEl = document.querySelector('[data-content="agendaDays"]');

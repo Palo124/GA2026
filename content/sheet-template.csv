@@ -9,6 +9,7 @@ about.items,"Official ESN decision-making event for sections and stakeholders.;F
 about.hidden,FALSE
 agenda.title,Agenda
 agenda.intro,Schedule is indicative and subject to change. Times are placeholders.
+agenda.icsHidden,FALSE
 agenda.hidden,FALSE
 venue.title,Dates & Venue
 venue.hidden,FALSE
