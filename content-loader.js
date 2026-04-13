@@ -358,6 +358,7 @@
         localsRecommend: []
       };
       var section = 'config';
+      var agendaHasExplicitEndTime = false;
       var i;
       for (i = 0; i < rows.length; i++) {
         var r = rows[i];
@@ -411,15 +412,16 @@
           else if (a0 === 'footer.line1') data.footer.line1 = a1;
           else if (a0 === 'footer.copyright') data.footer.copyright = a1;
           else if (a0 === 'footer.identityNote') data.footer.identityNote = a1;
-        } else if (section === 'agenda' && a0 !== 'day' && (a0 || a1 || r[2] || r[3] || r[4] || r[5])) {
-          var hasExplicitEndTime = !!r[5] || looksLikeAgendaTime(r[2]);
+        } else if (section === 'agenda' && a0 === 'day') {
+          agendaHasExplicitEndTime = a1 === 'startTime' && (r[2] || '').trim() === 'endTime';
+        } else if (section === 'agenda' && (a0 || a1 || r[2] || r[3] || r[4] || r[5])) {
           data.agenda.items.push({
             day: (a0 || '').trim(),
             startTime: (a1 || '').trim(),
-            endTime: hasExplicitEndTime ? (r[2] || '').trim() : '',
-            title: (hasExplicitEndTime ? (r[3] || '') : (r[2] || '')).trim(),
-            description: (hasExplicitEndTime ? (r[4] || '') : (r[3] || '')).trim(),
-            hidden: hasExplicitEndTime ? r[5] : r[4]
+            endTime: agendaHasExplicitEndTime ? (r[2] || '').trim() : '',
+            title: (agendaHasExplicitEndTime ? (r[3] || '') : (r[2] || '')).trim(),
+            description: (agendaHasExplicitEndTime ? (r[4] || '') : (r[3] || '')).trim(),
+            hidden: agendaHasExplicitEndTime ? r[5] : r[4]
           });
         } else if (section === 'faq' && a0 !== 'question' && (a0 || a1 || r[2])) {
           data.faq.push({ question: a0, answer: a1, hidden: r[2] });

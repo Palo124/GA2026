@@ -436,8 +436,17 @@ details[open] summary::after {
 }
 
 .agenda-item-time {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
   font-weight: 700;
-  color: var(--esn-dark-blue);
+  color: var(--esn-cyan);
+  background: rgba(0, 163, 224, 0.12);
+  border: 1px solid rgba(0, 163, 224, 0.22);
+  white-space: nowrap;
 }
 
 .agenda-item-body {
@@ -591,6 +600,10 @@ details[open] summary::after {
   .agenda-list-item {
     grid-template-columns: 1fr;
     gap: 0.35rem;
+  }
+
+  .agenda-item-time {
+    font-size: 0.95rem;
   }
 }
 
