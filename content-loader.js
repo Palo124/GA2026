@@ -11,6 +11,19 @@
     if (el && value != null) el.setAttribute(name, value);
   }
 
+  function setLinkState(el, url) {
+    var value = (url || '#').trim();
+    if (!el) return;
+    el.setAttribute('href', value);
+    if (value === '#') {
+      el.classList.add('btn-disabled');
+      el.setAttribute('aria-disabled', 'true');
+    } else {
+      el.classList.remove('btn-disabled');
+      el.removeAttribute('aria-disabled');
+    }
+  }
+
   function parseCSV(text) {
     var rows = [];
     var inQuotes = false;
@@ -72,24 +85,83 @@
     return '<svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h11A2.5 2.5 0 0 1 20 7.5v9a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 16.5zm2.2-.5L12 11.3 17.8 7zM18 8.4l-5.4 4a1 1 0 0 1-1.2 0L6 8.4v8.1c0 .3.2.5.5.5h11c.3 0 .5-.2.5-.5z" fill="currentColor"></path></svg>';
   }
 
+  function isHidden(value) {
+    if (value === true) return true;
+    return ((value || '') + '').trim().toUpperCase() === 'TRUE';
+  }
+
+  function filterVisible(items) {
+    return (Array.isArray(items) ? items : []).filter(function (item) {
+      return !isHidden(item && item.hidden);
+    });
+  }
+
+  function setSectionHidden(name, hidden) {
+    var el = document.querySelector('[data-section="' + name + '"]');
+    if (el) el.hidden = !!hidden;
+  }
+
+  function syncSectionGroupVisibility(selector) {
+    var el = document.querySelector(selector);
+    var hasVisible = false;
+    if (!el) return;
+    Array.prototype.forEach.call(el.querySelectorAll('[data-section]'), function (child) {
+      if (!child.hidden) hasVisible = true;
+    });
+    el.hidden = !hasVisible;
+  }
+
   function loadFromSheet(cfg) {
     var url = cfg.sheetUrl || ('https://docs.google.com/spreadsheets/d/' + cfg.sheetId + '/pub?output=csv&gid=' + (cfg.gid || 0));
     return fetchUrl(url).then(function (text) {
       if (!text) return null;
       var rows = parseCSV(text);
-      var data = { hero: {}, about: {}, venue: {}, contacts: [], social: [], contactsLegacy: {}, socialLegacy: {}, practical: {}, footer: {}, faq: [], documents: [], sponsors: [], localsRecommend: [] };
+      var data = {
+        hero: {},
+        about: {},
+        agenda: {
+          title: 'Agenda',
+          intro: 'Schedule is indicative and subject to change. Times are placeholders.',
+          items: []
+        },
+        venue: {},
+        sections: {
+          about: { hidden: false },
+          agenda: { hidden: false },
+          venue: { hidden: false },
+          contacts: { hidden: false },
+          social: { hidden: false },
+          faq: { hidden: false },
+          documents: { hidden: false },
+          sponsors: { hidden: false },
+          localsRecommend: { hidden: false }
+        },
+        venues: [],
+        contacts: [],
+        social: [],
+        contactsLegacy: {},
+        socialLegacy: {},
+        practical: {},
+        footer: {},
+        faq: [],
+        documents: [],
+        sponsors: [],
+        localsRecommend: []
+      };
       var section = 'config';
       var i;
       for (i = 0; i < rows.length; i++) {
         var r = rows[i];
         var a0 = (r[0] || '').trim();
         var a1 = (r[1] || '').trim();
+        if (a0 === '[AGENDA]') { section = 'agenda'; continue; }
         if (a0 === '[FAQ]') { section = 'faq'; continue; }
         if (a0 === '[DOCUMENTS]') { section = 'documents'; continue; }
         if (a0 === '[SPONSORS]') { section = 'sponsors'; continue; }
         if (a0 === '[LOCALS_RECOMMEND]') { section = 'localsRecommend'; continue; }
         if (a0 === '[CONTACTS]') { section = 'contacts'; continue; }
         if (a0 === '[SOCIAL]') { section = 'social'; continue; }
+        if (a0 === '[VENUES]') { section = 'venues'; continue; }
         if (section === 'config' && a0 && a0 !== 'key') {
           if (a0 === 'hero.title') data.hero.title = a1;
           else if (a0 === 'hero.subtitle') data.hero.subtitle = a1;
@@ -98,6 +170,10 @@
           else if (a0 === 'hero.contactUrl') data.hero.contactUrl = a1;
           else if (a0 === 'about.title') data.about.title = a1;
           else if (a0 === 'about.items') data.about.items = a1 ? a1.split(';').map(function (v) { return { value: v.trim() }; }) : [];
+          else if (a0 === 'about.hidden') data.sections.about.hidden = isHidden(a1);
+          else if (a0 === 'agenda.title') data.agenda.title = a1;
+          else if (a0 === 'agenda.intro') data.agenda.intro = a1;
+          else if (a0 === 'agenda.hidden') data.sections.agenda.hidden = isHidden(a1);
           else if (a0 === 'venue.title') data.venue.title = a1;
           else if (a0 === 'venue.venueName') data.venue.venueName = a1;
           else if (a0 === 'venue.addressLine1') data.venue.addressLine1 = a1;
@@ -106,6 +182,13 @@
           else if (a0 === 'venue.mapEmbedUrl') data.venue.mapEmbedUrl = a1;
           else if (a0 === 'venue.campusMapImage') data.venue.campusMapImage = a1;
           else if (a0 === 'venue.gettingThere') data.venue.gettingThere = a1;
+          else if (a0 === 'venue.hidden') data.sections.venue.hidden = isHidden(a1);
+          else if (a0 === 'contacts.hidden') data.sections.contacts.hidden = isHidden(a1);
+          else if (a0 === 'social.hidden') data.sections.social.hidden = isHidden(a1);
+          else if (a0 === 'faq.hidden') data.sections.faq.hidden = isHidden(a1);
+          else if (a0 === 'documents.hidden') data.sections.documents.hidden = isHidden(a1);
+          else if (a0 === 'sponsors.hidden') data.sections.sponsors.hidden = isHidden(a1);
+          else if (a0 === 'localsRecommend.hidden') data.sections.localsRecommend.hidden = isHidden(a1);
           else if (a0 === 'contacts.ocEmail') data.contactsLegacy.ocEmail = a1;
           else if (a0 === 'contacts.venueContact') data.contactsLegacy.venueContact = a1;
           else if (a0 === 'social.instagram') data.socialLegacy.instagram = a1;
@@ -118,24 +201,42 @@
           else if (a0 === 'footer.line1') data.footer.line1 = a1;
           else if (a0 === 'footer.copyright') data.footer.copyright = a1;
           else if (a0 === 'footer.identityNote') data.footer.identityNote = a1;
-        } else if (section === 'faq' && a0 !== 'question' && (a0 || a1)) {
-          data.faq.push({ question: a0, answer: a1 });
+        } else if (section === 'agenda' && a0 !== 'day' && (a0 || a1 || r[2] || r[3] || r[4])) {
+          data.agenda.items.push({
+            day: (a0 || '').trim(),
+            time: (a1 || '').trim(),
+            title: (r[2] || '').trim(),
+            description: (r[3] || '').trim(),
+            hidden: r[4]
+          });
+        } else if (section === 'faq' && a0 !== 'question' && (a0 || a1 || r[2])) {
+          data.faq.push({ question: a0, answer: a1, hidden: r[2] });
         } else if (section === 'documents' && a0 !== 'title' && a0) {
-          data.documents.push({ title: a0, description: a1, url: (r[2] || '#').trim(), linkText: (r[3] || 'Download / View').trim() });
+          data.documents.push({ title: a0, description: a1, url: (r[2] || '#').trim(), linkText: (r[3] || 'Download / View').trim(), hidden: r[4] });
         } else if (section === 'sponsors' && a0 !== 'name' && (a0 || a1)) {
-          data.sponsors.push({ name: a0, logoUrl: (a1 || '').trim(), url: (r[2] || '').trim() });
+          data.sponsors.push({ name: a0, logoUrl: (a1 || '').trim(), url: (r[2] || '').trim(), hidden: r[3] });
         } else if (section === 'localsRecommend' && a0 !== 'name' && a0) {
-          data.localsRecommend.push({ name: a0, description: a1, category: (r[2] || '').trim(), url: (r[3] || '#').trim(), linkText: (r[4] || 'View on map').trim() });
-        } else if (section === 'contacts' && a0 !== 'picture' && (a0 || a1 || r[2] || r[3] || r[4])) {
+          data.localsRecommend.push({ name: a0, description: a1, category: (r[2] || '').trim(), url: (r[3] || '#').trim(), linkText: (r[4] || 'View on map').trim(), hidden: r[5] });
+        } else if (section === 'venues' && a0 !== 'name' && (a0 || a1 || r[2] || r[3] || r[4] || r[5])) {
+          data.venues.push({
+            name: (a0 || '').trim(),
+            mapUrl: (a1 || '#').trim(),
+            addressLine1: (r[2] || '').trim(),
+            addressLine2: (r[3] || '').trim(),
+            cityPostal: (r[4] || '').trim(),
+            hidden: r[5]
+          });
+        } else if (section === 'contacts' && a0 !== 'picture' && (a0 || a1 || r[2] || r[3] || r[4] || r[5])) {
           data.contacts.push({
             picture: (a0 || '').trim(),
             group: (a1 || '').trim(),
             name: (r[2] || '').trim(),
             email: (r[3] || '').trim(),
-            phone: (r[4] || '').trim()
+            phone: (r[4] || '').trim(),
+            hidden: r[5]
           });
         } else if (section === 'social' && a0 !== 'name' && a0) {
-          data.social.push({ name: a0, url: (a1 || '#').trim() });
+          data.social.push({ name: a0, url: (a1 || '#').trim(), hidden: r[2] });
         }
       }
       return data;
@@ -144,6 +245,11 @@
 
   function apply(data) {
     if (!data) return;
+    var sections = data.sections || {};
+
+    function sectionIsHidden(name) {
+      return isHidden(sections[name] && sections[name].hidden);
+    }
 
     var hero = data.hero;
     if (hero) {
@@ -157,8 +263,8 @@
           return '<span class="chip">' + (v || '').replace(/</g, '&lt;') + '</span>';
         }).join('');
       }
-      setAttr(document.querySelector('[data-content-href="hero.infoPackUrl"]'), 'href', hero.infoPackUrl);
-      setAttr(document.querySelector('[data-content-href="hero.contactUrl"]'), 'href', hero.contactUrl);
+      setLinkState(document.querySelector('[data-content-href="hero.infoPackUrl"]'), hero.infoPackUrl);
+      setLinkState(document.querySelector('[data-content-href="hero.contactUrl"]'), hero.contactUrl);
     }
 
     var about = data.about;
@@ -173,14 +279,56 @@
         }).join('');
       }
     }
+    setSectionHidden('about', sectionIsHidden('about'));
+
+    var agenda = data.agenda || {};
+    setText(document.querySelector('[data-content="agenda.title"]'), agenda.title);
+    setText(document.querySelector('[data-content="agenda.intro"]'), agenda.intro);
+    var rawAgendaItems = Array.isArray(agenda.items) ? agenda.items : [];
+    var agendaItems = filterVisible(rawAgendaItems);
+    var agendaDaysEl = document.querySelector('[data-content="agendaDays"]');
+    if (agendaDaysEl && agendaItems.length > 0) {
+      var groupedAgenda = [];
+      var groupMap = {};
+      agendaItems.forEach(function (item) {
+        var day = (item.day || '').trim() || 'Agenda';
+        if (!groupMap[day]) {
+          groupMap[day] = { day: day, items: [] };
+          groupedAgenda.push(groupMap[day]);
+        }
+        groupMap[day].items.push(item);
+      });
+      agendaDaysEl.innerHTML = groupedAgenda.map(function (group, index) {
+        var dayLabel = group.day.replace(/</g, '&lt;');
+        var accentClass = ['agenda-accent-cyan', 'agenda-accent-orange', 'agenda-accent-magenta', 'agenda-accent-green'][index % 4];
+        var itemsHtml = group.items.map(function (item) {
+          var time = (item.time || '').replace(/</g, '&lt;');
+          var title = (item.title || '').replace(/</g, '&lt;');
+          var description = (item.description || '').replace(/</g, '&lt;');
+          return '<li class="agenda-list-item">' +
+            '<span class="agenda-item-time">' + time + '</span>' +
+            '<div class="agenda-item-body">' +
+            '<span class="agenda-item-title">' + title + '</span>' +
+            (description ? '<span class="agenda-item-description">' + description + '</span>' : '') +
+            '</div>' +
+            '</li>';
+        }).join('');
+        return '<details class="agenda-day-group ' + accentClass + '">' +
+          '<summary class="agenda-day-group-title">' +
+          '<span>' + dayLabel + '</span>' +
+          '<span class="agenda-day-count">' + group.items.length + ' items</span>' +
+          '</summary>' +
+          '<div class="agenda-day-group-body">' +
+          '<ol class="agenda-list">' + itemsHtml + '</ol>' +
+          '</div>' +
+          '</details>';
+      }).join('');
+    }
+    setSectionHidden('agenda', sectionIsHidden('agenda') || (rawAgendaItems.length > 0 && agendaItems.length === 0));
 
     var venue = data.venue;
     if (venue) {
       setText(document.querySelector('[data-content="venue.title"]'), venue.title);
-      setText(document.querySelector('[data-content="venue.venueName"]'), venue.venueName);
-      setText(document.querySelector('[data-content="venue.addressLine1"]'), venue.addressLine1);
-      setText(document.querySelector('[data-content="venue.addressLine2"]'), venue.addressLine2);
-      setText(document.querySelector('[data-content="venue.cityPostal"]'), venue.cityPostal);
       var mapIframe = document.querySelector('[data-content="venue.mapEmbedUrl"]');
       if (mapIframe) mapIframe.setAttribute('src', venue.mapEmbedUrl || '');
       var campusImg = document.querySelector('[data-content="venue.campusMapImage"]');
@@ -200,6 +348,38 @@
       }
     }
 
+    var venues = filterVisible(data.venues);
+    if (venues.length === 0 && venue && (venue.venueName || venue.addressLine1 || venue.addressLine2 || venue.cityPostal)) {
+      venues.push({
+        name: venue.venueName || '',
+        mapUrl: '#',
+        addressLine1: venue.addressLine1 || '',
+        addressLine2: venue.addressLine2 || '',
+        cityPostal: venue.cityPostal || ''
+      });
+    }
+    var venueListEl = document.querySelector('[data-content="venues"]');
+    if (venueListEl) {
+      venueListEl.innerHTML = venues.map(function (item) {
+        var name = (item.name || '').replace(/</g, '&lt;');
+        var mapUrl = (item.mapUrl || '#').trim();
+        var addressLine1 = (item.addressLine1 || '').replace(/</g, '&lt;');
+        var addressLine2 = (item.addressLine2 || '').replace(/</g, '&lt;');
+        var cityPostal = (item.cityPostal || '').replace(/</g, '&lt;');
+        var mapAttrs = mapUrl === '#'
+          ? 'class="btn btn-secondary btn-disabled" href="#" aria-disabled="true"'
+          : 'class="btn btn-secondary" href="' + (mapUrl + '').replace(/"/g, '&quot;') + '" target="_blank" rel="noopener"';
+        return '<div class="card">' +
+          '<h3>' + name + '</h3>' +
+          (addressLine1 ? '<p>' + addressLine1 + '</p>' : '') +
+          (addressLine2 ? '<p>' + addressLine2 + '</p>' : '') +
+          (cityPostal ? '<p>' + cityPostal + '</p>' : '') +
+          '<div class="btn-row"><a ' + mapAttrs + '>Open in Maps</a></div>' +
+          '</div>';
+      }).join('');
+    }
+    setSectionHidden('venue', sectionIsHidden('venue') || venues.length === 0);
+
     var contacts = data.contacts;
     var contactListEl = document.querySelector('[data-content="contactsList"]');
     if (Array.isArray(contacts) && contacts.length === 0 && (data.contactsLegacy.ocEmail || data.contactsLegacy.venueContact)) {
@@ -208,7 +388,8 @@
         { picture: '', group: 'Venue Contact', name: '', email: data.contactsLegacy.venueContact || '', phone: '' }
       ];
     }
-    if (Array.isArray(contacts) && contacts.length > 0 && contactListEl) {
+    contacts = filterVisible(contacts);
+    if (contactListEl) {
       contactListEl.innerHTML = contacts.map(function (c) {
         var picture = toDriveImageUrl(c.picture);
         var group = (c.group || '').replace(/</g, '&lt;');
@@ -241,6 +422,7 @@
         }, { once: true });
       });
     }
+    setSectionHidden('contacts', sectionIsHidden('contacts') || contacts.length === 0);
 
     var social = data.social;
     var socialListEl = document.querySelector('[data-content="socialList"]');
@@ -251,7 +433,8 @@
         { name: 'LinkedIn', url: data.socialLegacy.linkedin || '#' }
       ];
     }
-    if (Array.isArray(social) && social.length > 0 && socialListEl) {
+    social = filterVisible(social);
+    if (socialListEl) {
       socialListEl.innerHTML = social.map(function (s) {
         var rawName = (s.name || '').trim();
         var name = rawName.replace(/</g, '&lt;');
@@ -260,13 +443,15 @@
         return '<p><a ' + attrs + '>' + getSocialIcon(rawName) + '<span>' + name + '</span></a></p>';
       }).join('');
     }
+    setSectionHidden('social', sectionIsHidden('social') || social.length === 0);
 
-    var sponsors = data.sponsors;
+    var sponsors = filterVisible(data.sponsors);
     var sponsorGrid = document.querySelector('[data-content="sponsors"]');
-    if (sponsorGrid && Array.isArray(sponsors)) {
+    if (sponsorGrid) {
       sponsorGrid.innerHTML = sponsors.map(function (s) {
         var n = (s && s.name != null ? s.name : s) || '';
-        var logoUrl = (s && s.logoUrl) ? (s.logoUrl + '').replace(/"/g, '&quot;') : '';
+        var logoUrlRaw = (s && s.logoUrl) ? (s.logoUrl + '') : '';
+        var logoUrl = toDriveImageUrl(logoUrlRaw).replace(/"/g, '&quot;');
         var url = (s && s.url && s.url !== '#') ? (s.url + '').replace(/"/g, '&quot;') : '';
         var nameEsc = n.replace(/</g, '&lt;');
         var inner = logoUrl
@@ -276,20 +461,22 @@
         return wrap;
       }).join('');
     }
+    setSectionHidden('sponsors', sectionIsHidden('sponsors') || sponsors.length === 0);
 
-    var faq = data.faq;
+    var faq = filterVisible(data.faq);
     var faqContainer = document.querySelector('[data-content="faq"]');
-    if (faqContainer && Array.isArray(faq)) {
+    if (faqContainer) {
       faqContainer.innerHTML = faq.map(function (item) {
         var q = (item.question || '').replace(/</g, '&lt;').replace(/"/g, '&quot;');
         var a = (item.answer || '').replace(/</g, '&lt;');
         return '<details><summary>' + q + '</summary><div class="accordion-content">' + a + '</div></details>';
       }).join('');
     }
+    setSectionHidden('faq', sectionIsHidden('faq') || faq.length === 0);
 
-    var localsRecommend = data.localsRecommend;
+    var localsRecommend = filterVisible(data.localsRecommend);
     var localsContainer = document.querySelector('[data-content="localsRecommend"]');
-    if (localsContainer && Array.isArray(localsRecommend)) {
+    if (localsContainer) {
       localsContainer.innerHTML = localsRecommend.map(function (p) {
         var name = (p.name || '').replace(/</g, '&lt;');
         var desc = (p.description || '').replace(/</g, '&lt;');
@@ -300,10 +487,11 @@
         return '<div class="card doc-card"><span class="place-category">' + cat + '</span><h3>' + name + '</h3><p>' + desc + '</p><a class="btn btn-secondary' + disabled + '>' + linkText + '</a></div>';
       }).join('');
     }
+    setSectionHidden('localsRecommend', sectionIsHidden('localsRecommend') || localsRecommend.length === 0);
 
-    var documents = data.documents;
+    var documents = filterVisible(data.documents);
     var docContainer = document.querySelector('[data-content="documents"]');
-    if (docContainer && Array.isArray(documents)) {
+    if (docContainer) {
       docContainer.innerHTML = documents.map(function (d) {
         var title = (d.title || '').replace(/</g, '&lt;');
         var desc = (d.description || '').replace(/</g, '&lt;');
@@ -313,6 +501,8 @@
         return '<div class="card doc-card"><h3>' + title + '</h3><p>' + desc + '</p><a class="btn' + disabled + '>' + linkText + '</a></div>';
       }).join('');
     }
+    setSectionHidden('documents', sectionIsHidden('documents') || documents.length === 0);
+    syncSectionGroupVisibility('#contacts');
 
     var practical = data.practical;
     if (practical) {

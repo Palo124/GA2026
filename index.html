@@ -107,7 +107,7 @@
         </div>
       </div>
     </section>
-      <section class="section" id="about">
+      <section class="section" id="about" data-section="about">
         <div class="container">
           <h2 class="section-title" data-content="about.title">About GA</h2>
           <div class="card">
@@ -122,17 +122,19 @@
         </div>
       </section>
 
-      <section class="section" id="dates-venue">
+      <section class="section" id="dates-venue" data-section="venue">
         <div class="container grid two">
           <div>
             <h2 class="section-title" data-content="venue.title">Dates &amp; Venue</h2>
-            <div class="card">
-              <h3 data-content="venue.venueName">Prague University of Economics and Business (VŠE)</h3>
-              <p data-content="venue.addressLine1">Address placeholder line 1</p>
-              <p data-content="venue.addressLine2">Address placeholder line 2</p>
-              <p data-content="venue.cityPostal">City / postal code placeholder</p>
-              <div class="btn-row">
-                <span class="btn btn-secondary btn-disabled" aria-disabled="true">View agenda</span>
+            <div class="grid venue-card-list" data-content="venues">
+              <div class="card">
+                <h3>Prague University of Economics and Business (VŠE)</h3>
+                <p>Address placeholder line 1</p>
+                <p>Address placeholder line 2</p>
+                <p>City / postal code placeholder</p>
+                <div class="btn-row">
+                  <span class="btn btn-secondary btn-disabled" aria-disabled="true">Open in Maps</span>
+                </div>
               </div>
             </div>
           </div>
@@ -167,10 +169,10 @@
         </div>
       </section>
 
-      <section class="section" id="agenda">
+      <section class="section" id="agenda" data-section="agenda">
         <div class="container">
-          <h2 class="section-title">Agenda (Draft / Placeholder)</h2>
-          <p>Schedule is indicative and subject to change. Times are placeholders.</p>
+          <h2 class="section-title" data-content="agenda.title">Agenda</h2>
+          <p data-content="agenda.intro">Schedule is indicative and subject to change. Times are placeholders.</p>
           <div class="btn-row agenda-controls">
             <a class="btn btn-secondary icon-button" href="ga2026.ics" download aria-label="Add to calendar">
               <svg class="icon-calendar" viewBox="0 0 24 24" aria-hidden="true">
@@ -184,515 +186,36 @@
               <span>Add to calendar (.ics)</span>
             </a>
           </div>
-          <div class="agenda-calendar" aria-hidden="true">
-            <div class="agenda-day">
-              <div class="agenda-day-title">Wed 14 May</div>
-              <div class="agenda-event event-cyan event-tall">
-                Arrival &amp; travel day
-                <span class="event-time">All day · Placeholder</span>
-              </div>
-              <div class="agenda-event event-orange">
-                Dinner
-                <span class="event-time">18:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-magenta">
-                Free time
-                <span class="event-time">19:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-blue">
-                Ice Breaking Games
-                <span class="event-time">20:00 · Placeholder</span>
-              </div>
-            </div>
-            <div class="agenda-day">
-              <div class="agenda-day-title">Thu 15 May</div>
-              <div class="agenda-event event-cyan event-tall">
-                Registration
-                <span class="event-time">All day · Placeholder</span>
-              </div>
-              <div class="agenda-event event-orange">
-                Dinner
-                <span class="event-time">18:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-magenta">
-                Free time
-                <span class="event-time">19:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-blue">
-                Ice Breaking Games
-                <span class="event-time">20:00 · Placeholder</span>
-              </div>
-            </div>
-            <div class="agenda-day">
-              <div class="agenda-day-title">Fri 16 May</div>
-              <div class="agenda-event event-green">
-                Breakfast
-                <span class="event-time">08:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-cyan">
-                Plenary
-                <span class="event-time">09:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-orange">
-                Coffee break
-                <span class="event-time">11:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-cyan">
-                Plenary
-                <span class="event-time">11:30 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-green">
-                Lunch
-                <span class="event-time">13:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-cyan">
-                Plenary
-                <span class="event-time">14:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-orange">
-                Coffee break
-                <span class="event-time">16:30 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-cyan">
-                Plenary
-                <span class="event-time">17:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-orange">
-                Dinner
-                <span class="event-time">19:30 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-magenta">
-                Free time
-                <span class="event-time">20:30 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-blue">
-                Treasure Hunt
-                <span class="event-time">21:00 · Placeholder</span>
-              </div>
-            </div>
-            <div class="agenda-day">
-              <div class="agenda-day-title">Sat 17 May</div>
-              <div class="agenda-event event-green">
-                Breakfast
-                <span class="event-time">08:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-cyan">
-                Plenary
-                <span class="event-time">09:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-orange">
-                Coffee break
-                <span class="event-time">11:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-cyan">
-                Plenary
-                <span class="event-time">11:30 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-green">
-                Lunch
-                <span class="event-time">13:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-cyan">
-                Plenary
-                <span class="event-time">14:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-orange">
-                Coffee break
-                <span class="event-time">16:30 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-cyan">
-                Plenary
-                <span class="event-time">17:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-orange">
-                Dinner
-                <span class="event-time">19:30 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-magenta">
-                Free time
-                <span class="event-time">20:30 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-blue">
-                Pub Quiz
-                <span class="event-time">21:00 · Placeholder</span>
-              </div>
-            </div>
-            <div class="agenda-day">
-              <div class="agenda-day-title">Sun 18 May</div>
-              <div class="agenda-event event-green">
-                Breakfast
-                <span class="event-time">08:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-cyan">
-                Plenary
-                <span class="event-time">09:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-orange">
-                Coffee break
-                <span class="event-time">11:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-cyan">
-                Plenary
-                <span class="event-time">11:30 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-green">
-                Lunch
-                <span class="event-time">13:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-cyan">
-                Plenary
-                <span class="event-time">14:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-orange">
-                Coffee break
-                <span class="event-time">16:30 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-cyan">
-                Plenary
-                <span class="event-time">17:00 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-orange">
-                Dinner
-                <span class="event-time">18:30 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-magenta">
-                Free time
-                <span class="event-time">19:30 · Placeholder</span>
-              </div>
-              <div class="agenda-event event-blue">
-                Farewell Party
-                <span class="event-time">20:00 · Placeholder</span>
-              </div>
-            </div>
-          </div>
-          <div class="agenda-accordion">
-            <details>
-              <summary>Wed 14 May – Arrival</summary>
-              <div class="accordion-content">
-                <div class="agenda-grid">
-                  <div class="time-block block-cyan">
-                    <div class="time">All day</div>
-                    <div>
-                      <div class="session">Arrival &amp; travel day</div>
-                      <div class="meta">Placeholder</div>
+          <div class="agenda-days" data-content="agendaDays">
+            <details class="agenda-day-group agenda-accent-cyan">
+              <summary class="agenda-day-group-title">
+                <span>Wed 14 May</span>
+                <span class="agenda-day-count">2 items</span>
+              </summary>
+              <div class="agenda-day-group-body">
+                <ol class="agenda-list">
+                  <li class="agenda-list-item">
+                    <span class="agenda-item-time">All day</span>
+                    <div class="agenda-item-body">
+                      <span class="agenda-item-title">Arrival &amp; travel day</span>
+                      <span class="agenda-item-description">Placeholder</span>
                     </div>
-                  </div>
-                  <div class="time-block block-orange">
-                    <div class="time">18:00</div>
-                    <div>
-                      <div class="session">Dinner</div>
-                      <div class="meta">Placeholder</div>
+                  </li>
+                  <li class="agenda-list-item">
+                    <span class="agenda-item-time">18:00</span>
+                    <div class="agenda-item-body">
+                      <span class="agenda-item-title">Dinner</span>
+                      <span class="agenda-item-description">Placeholder</span>
                     </div>
-                  </div>
-                  <div class="time-block block-magenta">
-                    <div class="time">19:00</div>
-                    <div>
-                      <div class="session">Free time</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-cyan">
-                    <div class="time">20:00</div>
-                    <div>
-                      <div class="session">Ice Breaking Games</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </details>
-            <details>
-              <summary>Thu 15 May – Registration</summary>
-              <div class="accordion-content">
-                <div class="agenda-grid">
-                  <div class="time-block block-cyan">
-                    <div class="time">All day</div>
-                    <div>
-                      <div class="session">Registration</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-orange">
-                    <div class="time">18:00</div>
-                    <div>
-                      <div class="session">Dinner</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-magenta">
-                    <div class="time">19:00</div>
-                    <div>
-                      <div class="session">Free time</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-cyan">
-                    <div class="time">20:00</div>
-                    <div>
-                      <div class="session">Ice Breaking Games</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </details>
-            <details>
-              <summary>Fri 16 May – Plenary day</summary>
-              <div class="accordion-content">
-                <div class="agenda-grid">
-                  <div class="time-block block-green">
-                    <div class="time">08:00</div>
-                    <div>
-                      <div class="session">Breakfast</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-cyan">
-                    <div class="time">09:00</div>
-                    <div>
-                      <div class="session">Plenary</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-orange">
-                    <div class="time">11:00</div>
-                    <div>
-                      <div class="session">Coffee break</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-cyan">
-                    <div class="time">11:30</div>
-                    <div>
-                      <div class="session">Plenary</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-green">
-                    <div class="time">13:00</div>
-                    <div>
-                      <div class="session">Lunch</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-cyan">
-                    <div class="time">14:00</div>
-                    <div>
-                      <div class="session">Plenary</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-orange">
-                    <div class="time">16:30</div>
-                    <div>
-                      <div class="session">Coffee break</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-cyan">
-                    <div class="time">17:00</div>
-                    <div>
-                      <div class="session">Plenary</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-orange">
-                    <div class="time">19:30</div>
-                    <div>
-                      <div class="session">Dinner</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-magenta">
-                    <div class="time">20:30</div>
-                    <div>
-                      <div class="session">Free time</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-cyan">
-                    <div class="time">21:00</div>
-                    <div>
-                      <div class="session">Treasure Hunt</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </details>
-            <details>
-              <summary>Sat 17 May – Plenary day</summary>
-              <div class="accordion-content">
-                <div class="agenda-grid">
-                  <div class="time-block block-green">
-                    <div class="time">08:00</div>
-                    <div>
-                      <div class="session">Breakfast</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-cyan">
-                    <div class="time">09:00</div>
-                    <div>
-                      <div class="session">Plenary</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-orange">
-                    <div class="time">11:00</div>
-                    <div>
-                      <div class="session">Coffee break</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-cyan">
-                    <div class="time">11:30</div>
-                    <div>
-                      <div class="session">Plenary</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-green">
-                    <div class="time">13:00</div>
-                    <div>
-                      <div class="session">Lunch</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-cyan">
-                    <div class="time">14:00</div>
-                    <div>
-                      <div class="session">Plenary</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-orange">
-                    <div class="time">16:30</div>
-                    <div>
-                      <div class="session">Coffee break</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-cyan">
-                    <div class="time">17:00</div>
-                    <div>
-                      <div class="session">Plenary</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-orange">
-                    <div class="time">19:30</div>
-                    <div>
-                      <div class="session">Dinner</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-magenta">
-                    <div class="time">20:30</div>
-                    <div>
-                      <div class="session">Free time</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-cyan">
-                    <div class="time">21:00</div>
-                    <div>
-                      <div class="session">Pub Quiz</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </details>
-            <details>
-              <summary>Sun 18 May – Plenary day</summary>
-              <div class="accordion-content">
-                <div class="agenda-grid">
-                  <div class="time-block block-green">
-                    <div class="time">08:00</div>
-                    <div>
-                      <div class="session">Breakfast</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-cyan">
-                    <div class="time">09:00</div>
-                    <div>
-                      <div class="session">Plenary</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-orange">
-                    <div class="time">11:00</div>
-                    <div>
-                      <div class="session">Coffee break</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-cyan">
-                    <div class="time">11:30</div>
-                    <div>
-                      <div class="session">Plenary</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-green">
-                    <div class="time">13:00</div>
-                    <div>
-                      <div class="session">Lunch</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-cyan">
-                    <div class="time">14:00</div>
-                    <div>
-                      <div class="session">Plenary</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-orange">
-                    <div class="time">16:30</div>
-                    <div>
-                      <div class="session">Coffee break</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-cyan">
-                    <div class="time">17:00</div>
-                    <div>
-                      <div class="session">Plenary</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-orange">
-                    <div class="time">18:30</div>
-                    <div>
-                      <div class="session">Dinner</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-magenta">
-                    <div class="time">19:30</div>
-                    <div>
-                      <div class="session">Free time</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                  <div class="time-block block-cyan">
-                    <div class="time">20:00</div>
-                    <div>
-                      <div class="session">Farewell Party</div>
-                      <div class="meta">Placeholder</div>
-                    </div>
-                  </div>
-                </div>
+                  </li>
+                </ol>
               </div>
             </details>
           </div>
         </div>
       </section>
 
-      <section class="section" id="locals-recommend">
+      <section class="section" id="locals-recommend" data-section="localsRecommend">
         <div class="container">
           <h2 class="section-title">Locals recommend</h2>
           <p class="section-intro">Places in Prague recommended by the local organising committee.</p>
@@ -719,7 +242,7 @@
         </div>
       </section>
 
-      <section class="section" id="documents">
+      <section class="section" id="documents" data-section="documents">
         <div class="container">
           <h2 class="section-title">Important links</h2>
           <div class="grid two" data-content="documents">
@@ -744,46 +267,52 @@
 
       <section class="section" id="contacts">
         <div class="container">
-          <h2 class="section-title">Contacts</h2>
-          <div class="card">
-            <ul class="contact-list" data-content="contactsList" aria-label="Contact persons">
-              <li class="contact-item">
-                <div class="contact-avatar">
-                  <span class="contact-avatar-placeholder" aria-hidden="true">?</span>
-                </div>
-                <div class="contact-details">
-                  <span class="contact-group">Organising Committee</span>
-                  <span class="contact-name">Contact name placeholder</span>
-                  <span class="contact-email"><a href="mailto:oc@example.com">oc@example.com</a></span>
-                  <span class="contact-phone"><a href="tel:+420123456789">+420 123 456 789</a></span>
-                </div>
-              </li>
-              <li class="contact-item">
-                <div class="contact-avatar">
-                  <span class="contact-avatar-placeholder" aria-hidden="true">?</span>
-                </div>
-                <div class="contact-details">
-                  <span class="contact-group">Venue Contact</span>
-                  <span class="contact-name">Venue contact name placeholder</span>
-                  <span class="contact-email"><a href="mailto:venue@vse.cz">venue@vse.cz</a></span>
-                  <span class="contact-phone"><a href="tel:+420987654321">+420 987 654 321</a></span>
-                </div>
-              </li>
-            </ul>
+          <div data-section="contacts">
+            <h2 class="section-title">Contacts</h2>
+            <div class="card">
+              <ul class="contact-list" data-content="contactsList" aria-label="Contact persons">
+                <li class="contact-item">
+                  <div class="contact-avatar">
+                    <span class="contact-avatar-placeholder" aria-hidden="true">?</span>
+                  </div>
+                  <div class="contact-details">
+                    <span class="contact-group">Organising Committee</span>
+                    <span class="contact-name">Contact name placeholder</span>
+                    <span class="contact-email"><a href="mailto:oc@example.com">oc@example.com</a></span>
+                    <span class="contact-phone"><a href="tel:+420123456789">+420 123 456 789</a></span>
+                  </div>
+                </li>
+                <li class="contact-item">
+                  <div class="contact-avatar">
+                    <span class="contact-avatar-placeholder" aria-hidden="true">?</span>
+                  </div>
+                  <div class="contact-details">
+                    <span class="contact-group">Venue Contact</span>
+                    <span class="contact-name">Venue contact name placeholder</span>
+                    <span class="contact-email"><a href="mailto:venue@vse.cz">venue@vse.cz</a></span>
+                    <span class="contact-phone"><a href="tel:+420987654321">+420 987 654 321</a></span>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
-          <h2 class="section-title social-heading">Social media</h2>
-          <div class="card" data-content="socialList">
-            <p><a class="social-link btn-disabled" href="#" aria-disabled="true"><span>Instagram</span></a></p>
-            <p><a class="social-link btn-disabled" href="#" aria-disabled="true"><span>Facebook</span></a></p>
-            <p><a class="social-link btn-disabled" href="#" aria-disabled="true"><span>LinkedIn</span></a></p>
+          <div data-section="social">
+            <h2 class="section-title social-heading">Social media</h2>
+            <div class="card" data-content="socialList">
+              <p><a class="social-link btn-disabled" href="#" aria-disabled="true"><span>Instagram</span></a></p>
+              <p><a class="social-link btn-disabled" href="#" aria-disabled="true"><span>Facebook</span></a></p>
+              <p><a class="social-link btn-disabled" href="#" aria-disabled="true"><span>LinkedIn</span></a></p>
+            </div>
           </div>
-          <h2 class="section-title sponsor-heading">Sponsors</h2>
-          <div class="card sponsor-card">
-            <div class="sponsor-grid" data-content="sponsors">
-              <div class="sponsor-logo">Logo placeholder</div>
-              <div class="sponsor-logo">Logo placeholder</div>
-              <div class="sponsor-logo">Logo placeholder</div>
-              <div class="sponsor-logo">Logo placeholder</div>
+          <div data-section="sponsors">
+            <h2 class="section-title sponsor-heading">Sponsors</h2>
+            <div class="card sponsor-card">
+              <div class="sponsor-grid" data-content="sponsors">
+                <div class="sponsor-logo">Logo placeholder</div>
+                <div class="sponsor-logo">Logo placeholder</div>
+                <div class="sponsor-logo">Logo placeholder</div>
+                <div class="sponsor-logo">Logo placeholder</div>
+              </div>
             </div>
           </div>
         </div>

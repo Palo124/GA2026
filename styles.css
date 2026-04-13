@@ -344,6 +344,117 @@ details[open] summary::after {
 }
 
 /* Agenda calendar blocks */
+.agenda-days {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.agenda-day-group {
+  background: var(--esn-white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--esn-gray-100);
+  box-shadow: var(--esn-shadow);
+  overflow: hidden;
+}
+
+.agenda-day-group-body {
+  padding: 0 1.25rem 1.2rem;
+}
+
+.agenda-day-group-title {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+  border-bottom: 1px solid var(--esn-gray-200);
+}
+
+.agenda-day-group-title::-webkit-details-marker {
+  display: none;
+}
+
+.agenda-day-group[open] .agenda-day-group-title {
+  box-shadow: inset 0 -1px 0 var(--esn-gray-200);
+}
+
+.agenda-day-count {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(27, 58, 87, 0.08);
+  font-size: 0.85rem;
+  color: var(--esn-gray-700);
+  white-space: nowrap;
+}
+
+.agenda-accent-cyan .agenda-day-group-title {
+  border-left: 6px solid var(--esn-cyan);
+  background: linear-gradient(90deg, rgba(0, 163, 224, 0.12), rgba(0, 163, 224, 0.03));
+}
+
+.agenda-accent-orange .agenda-day-group-title {
+  border-left: 6px solid var(--esn-orange);
+  background: linear-gradient(90deg, rgba(247, 148, 29, 0.15), rgba(247, 148, 29, 0.04));
+}
+
+.agenda-accent-magenta .agenda-day-group-title {
+  border-left: 6px solid var(--esn-magenta);
+  background: linear-gradient(90deg, rgba(236, 0, 140, 0.12), rgba(236, 0, 140, 0.03));
+}
+
+.agenda-accent-green .agenda-day-group-title {
+  border-left: 6px solid var(--esn-green);
+  background: linear-gradient(90deg, rgba(122, 193, 67, 0.15), rgba(122, 193, 67, 0.04));
+}
+
+.agenda-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.agenda-list-item {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 0.85rem;
+  align-items: start;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--esn-gray-100);
+}
+
+.agenda-list-item:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.agenda-item-time {
+  font-weight: 700;
+  color: var(--esn-dark-blue);
+}
+
+.agenda-item-body {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.agenda-item-title {
+  font-weight: 700;
+  color: var(--esn-dark-blue);
+}
+
+.agenda-item-description {
+  color: var(--esn-gray-700);
+  font-size: 0.95rem;
+}
+
 .agenda-grid {
   display: grid;
   gap: 0.8rem;
@@ -464,6 +575,23 @@ details[open] summary::after {
 
 .block-orange {
   border-left: 6px solid var(--esn-orange);
+}
+
+@media (max-width: 640px) {
+  .agenda-day-group-title {
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+  }
+
+  .agenda-day-count {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .agenda-list-item {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
 }
 
 /* Cards */

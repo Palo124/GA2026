@@ -20,6 +20,17 @@
       { "value": "Attendance by registered ESN delegates and invited guests." }
     ]
   },
+  "agenda": {
+    "title": "Agenda",
+    "intro": "Schedule is indicative and subject to change. Times are placeholders.",
+    "items": [
+      { "day": "Wed 14 May", "time": "All day", "title": "Arrival & travel day", "description": "Placeholder", "hidden": false },
+      { "day": "Wed 14 May", "time": "18:00", "title": "Dinner", "description": "Placeholder", "hidden": false },
+      { "day": "Thu 15 May", "time": "All day", "title": "Registration", "description": "Placeholder", "hidden": false },
+      { "day": "Fri 16 May", "time": "09:00", "title": "Plenary", "description": "Placeholder", "hidden": false },
+      { "day": "Sun 18 May", "time": "20:00", "title": "Farewell Party", "description": "Placeholder", "hidden": false }
+    ]
+  },
   "venue": {
     "title": "Dates & Venue",
     "venueName": "Prague University of Economics and Business (VŠE)",
@@ -30,42 +41,63 @@
     "campusMapImage": "2026-01-19_21-14.png",
     "gettingThere": "Public transport placeholder (metro/tram lines). Walking routes placeholder. Taxi/ride share guidance placeholder."
   },
+  "sections": {
+    "about": { "hidden": false },
+    "agenda": { "hidden": false },
+    "venue": { "hidden": false },
+    "contacts": { "hidden": false },
+    "social": { "hidden": false },
+    "faq": { "hidden": false },
+    "documents": { "hidden": false },
+    "sponsors": { "hidden": false },
+    "localsRecommend": { "hidden": false }
+  },
+  "venues": [
+    {
+      "name": "Prague University of Economics and Business (VŠE)",
+      "mapUrl": "#",
+      "addressLine1": "Address placeholder line 1",
+      "addressLine2": "Address placeholder line 2",
+      "cityPostal": "City / postal code placeholder",
+      "hidden": false
+    }
+  ],
   "contacts": [
-    { "picture": "", "group": "Organising Committee", "name": "Contact name placeholder", "email": "oc@example.com", "phone": "+420 123 456 789" },
-    { "picture": "", "group": "Venue Contact", "name": "Venue contact name placeholder", "email": "venue@vse.cz", "phone": "+420 987 654 321" }
+    { "picture": "", "group": "Organising Committee", "name": "Contact name placeholder", "email": "oc@example.com", "phone": "+420 123 456 789", "hidden": false },
+    { "picture": "", "group": "Venue Contact", "name": "Venue contact name placeholder", "email": "venue@vse.cz", "phone": "+420 987 654 321", "hidden": false }
   ],
   "social": [
-    { "name": "Instagram", "url": "#" },
-    { "name": "Facebook", "url": "#" },
-    { "name": "LinkedIn", "url": "#" }
+    { "name": "Instagram", "url": "#", "hidden": false },
+    { "name": "Facebook", "url": "#", "hidden": false },
+    { "name": "LinkedIn", "url": "#", "hidden": false }
   ],
   "sponsors": [
-    { "name": "Logo placeholder", "logoUrl": "", "url": "#" },
-    { "name": "Logo placeholder", "logoUrl": "", "url": "#" },
-    { "name": "Logo placeholder", "logoUrl": "", "url": "#" },
-    { "name": "Logo placeholder", "logoUrl": "", "url": "#" }
+    { "name": "Logo placeholder", "logoUrl": "", "url": "#", "hidden": false },
+    { "name": "Logo placeholder", "logoUrl": "", "url": "#", "hidden": false },
+    { "name": "Logo placeholder", "logoUrl": "", "url": "#", "hidden": false },
+    { "name": "Logo placeholder", "logoUrl": "", "url": "#", "hidden": false }
   ],
   "faq": [
-    { "question": "Who can attend GA 2026?", "answer": "Attendance policy placeholder." },
-    { "question": "What language will sessions be in?", "answer": "Language policy placeholder." },
-    { "question": "How do I get from the airport to the venue?", "answer": "Airport transfer placeholder." },
-    { "question": "What should delegates bring?", "answer": "Packing checklist placeholder." },
-    { "question": "Is there a dress code?", "answer": "Dress code placeholder." },
-    { "question": "Will sessions be recorded?", "answer": "Recording policy placeholder." },
-    { "question": "How are dietary requirements handled?", "answer": "Dietary process placeholder." },
-    { "question": "What accessibility support is available?", "answer": "Accessibility support placeholder." },
-    { "question": "Who do I contact for urgent issues?", "answer": "Emergency contact placeholder." },
-    { "question": "Where can I find updates after the event?", "answer": "Post-event communications placeholder." }
+    { "question": "Who can attend GA 2026?", "answer": "Attendance policy placeholder.", "hidden": false },
+    { "question": "What language will sessions be in?", "answer": "Language policy placeholder.", "hidden": false },
+    { "question": "How do I get from the airport to the venue?", "answer": "Airport transfer placeholder.", "hidden": false },
+    { "question": "What should delegates bring?", "answer": "Packing checklist placeholder.", "hidden": false },
+    { "question": "Is there a dress code?", "answer": "Dress code placeholder.", "hidden": false },
+    { "question": "Will sessions be recorded?", "answer": "Recording policy placeholder.", "hidden": false },
+    { "question": "How are dietary requirements handled?", "answer": "Dietary process placeholder.", "hidden": false },
+    { "question": "What accessibility support is available?", "answer": "Accessibility support placeholder.", "hidden": false },
+    { "question": "Who do I contact for urgent issues?", "answer": "Emergency contact placeholder.", "hidden": false },
+    { "question": "Where can I find updates after the event?", "answer": "Post-event communications placeholder.", "hidden": false }
   ],
   "localsRecommend": [
-    { "name": "Charles Bridge", "description": "Iconic 14th-century bridge with stunning views of the Vltava and Prague Castle. Best visited at sunrise.", "category": "Sight", "url": "https://www.google.com/maps/search/Charles+Bridge+Prague", "linkText": "View on map" },
-    { "name": "Place name placeholder", "description": "Short description of the place. Add your favourite spots in Prague.", "category": "Restaurant", "url": "#", "linkText": "View on map" },
-    { "name": "Place name placeholder", "description": "Short description of the place.", "category": "Café", "url": "#", "linkText": "View on map" }
+    { "name": "Charles Bridge", "description": "Iconic 14th-century bridge with stunning views of the Vltava and Prague Castle. Best visited at sunrise.", "category": "Sight", "url": "https://www.google.com/maps/search/Charles+Bridge+Prague", "linkText": "View on map", "hidden": false },
+    { "name": "Place name placeholder", "description": "Short description of the place. Add your favourite spots in Prague.", "category": "Restaurant", "url": "#", "linkText": "View on map", "hidden": false },
+    { "name": "Place name placeholder", "description": "Short description of the place.", "category": "Café", "url": "#", "linkText": "View on map", "hidden": false }
   ],
   "documents": [
-    { "title": "Info Pack", "description": "PDF placeholder. Final version to be shared closer to the event.", "url": "#", "linkText": "Download info pack (PDF)" },
-    { "title": "Agenda", "description": "PDF placeholder. Latest draft will be updated regularly.", "url": "#", "linkText": "Download agenda (PDF)" },
-    { "title": "Code of Conduct", "description": "Placeholder link to ESN Code of Conduct.", "url": "#", "linkText": "View Code of Conduct" }
+    { "title": "Info Pack", "description": "PDF placeholder. Final version to be shared closer to the event.", "url": "#", "linkText": "Download info pack (PDF)", "hidden": false },
+    { "title": "Agenda", "description": "PDF placeholder. Latest draft will be updated regularly.", "url": "#", "linkText": "Download agenda (PDF)", "hidden": false },
+    { "title": "Code of Conduct", "description": "Placeholder link to ESN Code of Conduct.", "url": "#", "linkText": "View Code of Conduct", "hidden": false }
   ],
   "practical": {
     "accommodation": "Tier 1: Hotel placeholder (price range placeholder). Tier 2: Budget hotel placeholder. Tier 3: Hostel placeholder.",

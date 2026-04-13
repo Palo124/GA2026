@@ -6,14 +6,21 @@ hero.infoPackUrl,#
 hero.contactUrl,#
 about.title,About GA
 about.items,"Official ESN decision-making event for sections and stakeholders.;Focus on strategy, knowledge exchange, and community priorities for 2026.;Mix of plenary sessions, workshops, and networking moments.;Hosted in Prague with a local organising committee.;Attendance by registered ESN delegates and invited guests."
+about.hidden,FALSE
+agenda.title,Agenda
+agenda.intro,Schedule is indicative and subject to change. Times are placeholders.
+agenda.hidden,FALSE
 venue.title,Dates & Venue
-venue.venueName,Prague University of Economics and Business (VŠE)
-venue.addressLine1,Address placeholder line 1
-venue.addressLine2,Address placeholder line 2
-venue.cityPostal,City / postal code placeholder
+venue.hidden,FALSE
 venue.mapEmbedUrl,https://www.google.com/maps/d/embed?mid=1Kbht9FGvpUOa5ALkBO48aLLyJJ_ZGx0&ehbc=2E312F&noprof=1
 venue.campusMapImage,2026-01-19_21-14.png
 venue.gettingThere,"Public transport placeholder (metro/tram lines). Walking routes placeholder. Taxi/ride share guidance placeholder."
+contacts.hidden,FALSE
+social.hidden,FALSE
+faq.hidden,FALSE
+documents.hidden,FALSE
+sponsors.hidden,FALSE
+localsRecommend.hidden,FALSE
 contacts.ocEmail,Email placeholder (no real email provided).
 contacts.venueContact,Phone/email placeholder (no real details provided).
 social.instagram,Instagram placeholder
@@ -27,45 +34,59 @@ footer.line1,ESN General Assembly 2026 – informational landing page only.
 footer.copyright,Copyright placeholder © 2026.
 footer.identityNote,ESN Visual Identity rules respected (fonts, colors, logo safe zones).
 
+[AGENDA]
+day,time,title,description,hidden
+Wed 14 May,All day,Arrival & travel day,Placeholder,FALSE
+Wed 14 May,18:00,Dinner,Placeholder,FALSE
+Thu 15 May,All day,Registration,Placeholder,FALSE
+Fri 16 May,09:00,Plenary,Placeholder,FALSE
+Sun 18 May,20:00,Farewell Party,Placeholder,FALSE
+
+[VENUES]
+name,mapUrl,addressLine1,addressLine2,cityPostal,hidden
+Prague University of Economics and Business (VŠE),https://maps.app.goo.gl/yN6WH7MoYrgCe53H9,nám. Winstona Churchilla 1938/4,,"130 00 Praha 3-Žižkov, Česko",FALSE
+Clown & Bard Hostel,https://maps.app.goo.gl/8w53ZoNEuXQQcM4r7,Bořivojova 758/102,,"130 00 Praha 3-Žižkov, Česko",FALSE
+Pension 15 - Apartment 15 Zizkov Praga,https://maps.app.goo.gl/iP8pAEq42u8uxw4Z7,Vlkova 452/15,,"130 00 Praha 3-Žižkov, Česko",FALSE
+
 [CONTACTS]
-picture,group,name,email,phone
-,Organising Committee,Contact name placeholder,oc@example.com,+420 123 456 789
-,Venue Contact,Venue contact name placeholder,venue@vse.cz,+420 987 654 321
+picture,group,name,email,phone,hidden
+,Organising Committee,Contact name placeholder,oc@example.com,+420 123 456 789,FALSE
+,Venue Contact,Venue contact name placeholder,venue@vse.cz,+420 987 654 321,FALSE
 
 [SOCIAL]
-name,url
-Instagram,#
-Facebook,#
-LinkedIn,#
+name,url,hidden
+Instagram,#,FALSE
+Facebook,#,FALSE
+LinkedIn,#,FALSE
 
 [FAQ]
-question,answer
-Who can attend GA 2026?,Attendance policy placeholder.
-What language will sessions be in?,Language policy placeholder.
-How do I get from the airport to the venue?,Airport transfer placeholder.
-What should delegates bring?,Packing checklist placeholder.
-Is there a dress code?,Dress code placeholder.
-Will sessions be recorded?,Recording policy placeholder.
-How are dietary requirements handled?,Dietary process placeholder.
-What accessibility support is available?,Accessibility support placeholder.
-Who do I contact for urgent issues?,Emergency contact placeholder.
-Where can I find updates after the event?,Post-event communications placeholder.
+question,answer,hidden
+Who can attend GA 2026?,Attendance policy placeholder.,FALSE
+What language will sessions be in?,Language policy placeholder.,FALSE
+How do I get from the airport to the venue?,Airport transfer placeholder.,FALSE
+What should delegates bring?,Packing checklist placeholder.,FALSE
+Is there a dress code?,Dress code placeholder.,FALSE
+Will sessions be recorded?,Recording policy placeholder.,FALSE
+How are dietary requirements handled?,Dietary process placeholder.,FALSE
+What accessibility support is available?,Accessibility support placeholder.,FALSE
+Who do I contact for urgent issues?,Emergency contact placeholder.,FALSE
+Where can I find updates after the event?,Post-event communications placeholder.,FALSE
 
 [DOCUMENTS]
-title,description,url,linkText
-Info Pack,"PDF placeholder. Final version to be shared closer to the event.",#,Download info pack (PDF)
-Agenda,"PDF placeholder. Latest draft will be updated regularly.",#,Download agenda (PDF)
-Code of Conduct,Placeholder link to ESN Code of Conduct.,#,View Code of Conduct
+title,description,url,linkText,hidden
+Info Pack,"PDF placeholder. Final version to be shared closer to the event.",#,Download info pack (PDF),FALSE
+Agenda,"PDF placeholder. Latest draft will be updated regularly.",#,Download agenda (PDF),FALSE
+Code of Conduct,Placeholder link to ESN Code of Conduct.,#,View Code of Conduct,FALSE
 
 [LOCALS_RECOMMEND]
-name,description,category,url,linkText
-Charles Bridge,"Iconic 14th-century bridge with stunning views of the Vltava and Prague Castle. Best visited at sunrise.",Sight,https://www.google.com/maps/search/Charles+Bridge+Prague,View on map
-Place name placeholder,Short description of the place. Add your favourite spots in Prague.,Restaurant,#,View on map
-Place name placeholder,Short description of the place.,Café,#,View on map
+name,description,category,url,linkText,hidden
+Charles Bridge,"Iconic 14th-century bridge with stunning views of the Vltava and Prague Castle. Best visited at sunrise.",Sight,https://www.google.com/maps/search/Charles+Bridge+Prague,View on map,FALSE
+Place name placeholder,Short description of the place. Add your favourite spots in Prague.,Restaurant,#,View on map,FALSE
+Place name placeholder,Short description of the place.,Café,#,View on map,FALSE
 
 [SPONSORS]
-name,logoUrl,url
-Logo placeholder,,#
-Logo placeholder,,#
-Logo placeholder,,#
-Logo placeholder,,#
+name,logoUrl,url,hidden
+Logo placeholder,,#,FALSE
+Logo placeholder,,#,FALSE
+Logo placeholder,,#,FALSE
+Logo placeholder,,#,FALSE
