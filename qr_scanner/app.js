@@ -8,8 +8,11 @@
   var resultCache = {};
   var selectedImageFile = null;
   var SESSION_STORAGE_KEY = 'ga26_qr_session_v1';
+  var THEME_STORAGE_KEY = 'ga26_qr_theme';
+  var prefersDarkMq = typeof window.matchMedia === 'function' ? window.matchMedia('(prefers-color-scheme: dark)') : null;
   var sessionOk = !config.apiBaseUrl;
   var sessionLockApplicable = false;
+  var scannerPausedForResultModal = false;
 
   var elements = {
     modePill: document.getElementById('mode-pill'),
@@ -31,14 +34,151 @@
     sessionForm: document.getElementById('session-form'),
     sessionPassword: document.getElementById('session-password'),
     sessionFormError: document.getElementById('session-form-error'),
-    sessionLockButton: document.getElementById('session-lock')
+    sessionLockWrap: document.getElementById('session-lock-wrap'),
+    sessionLockButton: document.getElementById('session-lock'),
+    infoSigninTrigger: document.getElementById('info-signin-trigger'),
+    infoLockTrigger: document.getElementById('info-lock-trigger'),
+    infoResultTrigger: document.getElementById('info-result-trigger'),
+    infoSigninDialog: document.getElementById('info-signin-dialog'),
+    infoLockDialog: document.getElementById('info-lock-dialog'),
+    infoResultDialog: document.getElementById('info-result-dialog'),
+    loginSuccessDialog: document.getElementById('login-success-dialog'),
+    resultModal: document.getElementById('result-modal'),
+    resultModalClose: document.getElementById('result-modal-close'),
+    modalResultName: document.getElementById('modal-result-name'),
+    modalResultId: document.getElementById('modal-result-id'),
+    modalResultFields: document.getElementById('modal-result-fields'),
+    openResultModal: document.getElementById('open-result-modal'),
+    statusBannerText: document.getElementById('status-banner-text'),
+    sessionUnlockButton: document.getElementById('session-unlock'),
+    appLoading: document.getElementById('app-loading'),
+    appLoadingText: document.getElementById('app-loading-text'),
+    scannerWorkspace: document.getElementById('scanner-workspace'),
+    themeDarkSwitch: document.getElementById('theme-dark-switch'),
+    themeFollowDevice: document.getElementById('theme-follow-device')
   };
 
-  function setStatus(message, tone) {
-    elements.statusBanner.textContent = message;
+  function getStoredColorScheme() {
+    try {
+      var v = localStorage.getItem(THEME_STORAGE_KEY);
+      if (v === 'light' || v === 'dark') return v;
+    } catch (e) {}
+    return null;
+  }
+
+  function setStoredColorScheme(value) {
+    try {
+      if (value === null || value === undefined) {
+        localStorage.removeItem(THEME_STORAGE_KEY);
+      } else {
+        localStorage.setItem(THEME_STORAGE_KEY, value);
+      }
+    } catch (e) {}
+  }
+
+  function effectiveColorScheme() {
+    var s = getStoredColorScheme();
+    if (s === 'light' || s === 'dark') return s;
+    if (prefersDarkMq && typeof prefersDarkMq.matches === 'boolean') {
+      return prefersDarkMq.matches ? 'dark' : 'light';
+    }
+    return 'dark';
+  }
+
+  function applyColorScheme() {
+    var s = getStoredColorScheme();
+    var root = document.documentElement;
+    if (s === 'light') root.setAttribute('data-theme', 'light');
+    else if (s === 'dark') root.setAttribute('data-theme', 'dark');
+    else root.removeAttribute('data-theme');
+  }
+
+  function syncThemeControls() {
+    var input = elements.themeDarkSwitch;
+    var btn = elements.themeFollowDevice;
+    if (!input) return;
+    input.checked = effectiveColorScheme() === 'dark';
+    if (btn) {
+      btn.hidden = getStoredColorScheme() === null;
+    }
+  }
+
+  function wireTheme() {
+    var input = elements.themeDarkSwitch;
+    var btn = elements.themeFollowDevice;
+    if (!input) return;
+    input.addEventListener('change', function () {
+      setStoredColorScheme(input.checked ? 'dark' : 'light');
+      applyColorScheme();
+      syncThemeControls();
+    });
+    if (btn) {
+      btn.addEventListener('click', function () {
+        setStoredColorScheme(null);
+        applyColorScheme();
+        syncThemeControls();
+      });
+    }
+    if (prefersDarkMq && prefersDarkMq.addEventListener) {
+      prefersDarkMq.addEventListener('change', function () {
+        if (getStoredColorScheme() === null) syncThemeControls();
+      });
+    } else if (prefersDarkMq && prefersDarkMq.addListener) {
+      prefersDarkMq.addListener(function () {
+        if (getStoredColorScheme() === null) syncThemeControls();
+      });
+    }
+  }
+
+  var SESSION_UNLOCK_LABEL = 'Unlock';
+  var SESSION_UNLOCK_LOADING = 'Signing in…';
+
+  function setFullScreenLoading(active, message) {
+    if (!elements.appLoading) return;
+    var on = !!active;
+    if (on) {
+      if (elements.appLoadingText) {
+        elements.appLoadingText.textContent = message || '';
+      }
+      elements.appLoading.hidden = false;
+      elements.appLoading.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('app-loading-on');
+    } else {
+      elements.appLoading.hidden = true;
+      elements.appLoading.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('app-loading-on');
+    }
+  }
+
+  function setStatus(message, tone, loading) {
+    loading = !!loading;
     elements.statusBanner.classList.remove('is-error', 'is-success');
-    if (tone === 'error') elements.statusBanner.classList.add('is-error');
-    if (tone === 'success') elements.statusBanner.classList.add('is-success');
+    if (!loading) {
+      if (tone === 'error') elements.statusBanner.classList.add('is-error');
+      if (tone === 'success') elements.statusBanner.classList.add('is-success');
+    }
+    elements.statusBanner.setAttribute('aria-busy', loading ? 'true' : 'false');
+    if (loading) {
+      elements.statusBanner.setAttribute('aria-hidden', 'true');
+    } else {
+      elements.statusBanner.removeAttribute('aria-hidden');
+    }
+    if (elements.statusBannerText) {
+      elements.statusBannerText.textContent = message;
+    } else {
+      elements.statusBanner.textContent = message;
+    }
+    setFullScreenLoading(loading, message);
+  }
+
+  function setSessionLoginLoading(active) {
+    if (elements.sessionUnlockButton) {
+      elements.sessionUnlockButton.disabled = !!active;
+      elements.sessionUnlockButton.textContent = active ? SESSION_UNLOCK_LOADING : SESSION_UNLOCK_LABEL;
+    }
+    if (elements.sessionPassword) {
+      elements.sessionPassword.disabled = !!active;
+    }
   }
 
   function setModeLabel() {
@@ -57,15 +197,18 @@
   function setButtonState() {
     var sessionLocked = config.apiBaseUrl && !sessionOk;
     elements.startButton.disabled =
-      sessionLocked || scannerActive || typeof Html5Qrcode === 'undefined';
+      sessionLocked ||
+      scannerActive ||
+      lookupInFlight ||
+      typeof Html5Qrcode === 'undefined';
     elements.stopButton.disabled = !scannerActive;
     if (elements.manualId) {
-      elements.manualId.disabled = sessionLocked;
+      elements.manualId.disabled = sessionLocked || lookupInFlight;
     }
     var lookupSubmit =
       elements.lookupForm && elements.lookupForm.querySelector('button[type="submit"]');
     if (lookupSubmit) {
-      lookupSubmit.disabled = sessionLocked;
+      lookupSubmit.disabled = sessionLocked || lookupInFlight;
     }
     if (elements.scanGalleryButton) {
       elements.scanGalleryButton.disabled =
@@ -84,10 +227,19 @@
     elements.resultContent.hidden = true;
     elements.resultPanel.classList.add('is-empty');
     elements.resultEmpty.hidden = false;
+    if (elements.modalResultFields) elements.modalResultFields.innerHTML = '';
+    if (elements.modalResultName) elements.modalResultName.textContent = '-';
+    if (elements.modalResultId) elements.modalResultId.textContent = '-';
+    if (elements.openResultModal) elements.openResultModal.hidden = true;
+    if (elements.resultModal && elements.resultModal.open) {
+      elements.resultModal.close();
+    }
   }
 
-  function addResultRow(label, value, dayClass) {
+  function addResultRow(label, value, dayClass, container) {
     if (!value) return;
+    var target = container || elements.resultFields;
+    if (!target) return;
     var row = document.createElement('div');
     row.className = 'result-row' + (dayClass ? ' ' + dayClass : '');
 
@@ -99,7 +251,93 @@
 
     row.appendChild(dt);
     row.appendChild(dd);
-    elements.resultFields.appendChild(row);
+    target.appendChild(row);
+  }
+
+  function fillResultBlocks(data) {
+    var display =
+      data.displayName || data.participantId || 'Participant found';
+    var pid = data.participantId || '';
+
+    elements.resultName.textContent = display;
+    elements.resultId.textContent = pid;
+    elements.resultFields.innerHTML = '';
+
+    if (elements.modalResultName) elements.modalResultName.textContent = display;
+    if (elements.modalResultId) elements.modalResultId.textContent = pid;
+    if (elements.modalResultFields) elements.modalResultFields.innerHTML = '';
+
+    var modalFields = elements.modalResultFields;
+
+    function row(label, val, cls) {
+      addResultRow(label, val, cls, elements.resultFields);
+      addResultRow(label, val, cls, modalFields);
+    }
+
+    row('Friday lunch', data.fridayLunch, 'result-row--friday');
+    row('Friday dinner', data.fridayDinner, 'result-row--friday');
+    row('Saturday lunch', data.saturdayLunch, 'result-row--saturday');
+    row('Saturday dinner', data.saturdayDinner, 'result-row--saturday');
+    row('Sunday lunch', data.sundayLunch, 'result-row--sunday');
+    row('Sunday dinner', data.sundayDinner, 'result-row--sunday');
+    row('Food choice', data.foodChoice);
+    row('Dietary description', data.dietaryDescription);
+    row('Allergens', data.allergens);
+    row('Notes', data.notes);
+  }
+
+  function pauseScannerForResultModal() {
+    if (!html5QrCode || !scannerActive || scannerPausedForResultModal) return;
+    try {
+      if (typeof html5QrCode.pause === 'function') {
+        html5QrCode.pause(true);
+        scannerPausedForResultModal = true;
+        return;
+      }
+    } catch (e) {}
+    scannerPausedForResultModal = false;
+    stopScanner().catch(function () {});
+  }
+
+  function resumeScannerAfterResultModalIfNeeded() {
+    if (!scannerPausedForResultModal) return;
+    scannerPausedForResultModal = false;
+    var sessionLocked = config.apiBaseUrl && !sessionOk;
+    if (sessionLocked) return;
+    if (!html5QrCode || typeof html5QrCode.resume !== 'function') return;
+    if (!scannerActive) return;
+    html5QrCode
+      .resume()
+      .then(function () {
+        scanLock = false;
+        setButtonState();
+        setStatus('Camera active. Hold the QR inside the frame.', null, false);
+      })
+      .catch(function () {
+        scannerActive = false;
+        scanLock = false;
+        setButtonState();
+      });
+  }
+
+  function openResultModalDialog() {
+    if (!elements.resultModal) return;
+    var hasMeta =
+      elements.modalResultName &&
+      elements.modalResultName.textContent &&
+      elements.modalResultName.textContent !== '-';
+    var hasRows =
+      elements.modalResultFields && elements.modalResultFields.children.length > 0;
+    if (!hasMeta && !hasRows) return;
+
+    pauseScannerForResultModal();
+    scanLock = false;
+
+    try {
+      if (!elements.resultModal.open) {
+        elements.resultModal.showModal();
+      }
+    } catch (e) {}
   }
 
   function renderResult(data) {
@@ -108,24 +346,14 @@
       return;
     }
 
-    elements.resultName.textContent =
-      data.displayName || data.participantId || 'Participant found';
-    elements.resultId.textContent = data.participantId || '';
-    elements.resultFields.innerHTML = '';
-    addResultRow('Friday lunch', data.fridayLunch, 'result-row--friday');
-    addResultRow('Friday dinner', data.fridayDinner, 'result-row--friday');
-    addResultRow('Saturday lunch', data.saturdayLunch, 'result-row--saturday');
-    addResultRow('Saturday dinner', data.saturdayDinner, 'result-row--saturday');
-    addResultRow('Sunday lunch', data.sundayLunch, 'result-row--sunday');
-    addResultRow('Sunday dinner', data.sundayDinner, 'result-row--sunday');
-    addResultRow('Food choice', data.foodChoice);
-    addResultRow('Dietary description', data.dietaryDescription);
-    addResultRow('Allergens', data.allergens);
-    addResultRow('Notes', data.notes);
+    fillResultBlocks(data);
 
     elements.resultPanel.classList.remove('is-empty');
     elements.resultEmpty.hidden = true;
     elements.resultContent.hidden = false;
+    if (elements.openResultModal) elements.openResultModal.hidden = false;
+
+    openResultModalDialog();
   }
 
   function normalizeParticipantId(rawValue) {
@@ -212,14 +440,36 @@
     }
   }
 
+  function syncWorkspaceGate() {
+    if (!elements.scannerWorkspace) return;
+    var api = !!config.apiBaseUrl;
+    var showWorkspace = !api || sessionOk;
+    elements.scannerWorkspace.hidden = !showWorkspace;
+    elements.scannerWorkspace.setAttribute('aria-hidden', showWorkspace ? 'false' : 'true');
+  }
+
   function showSessionGate(message) {
     sessionOk = false;
     if (elements.sessionGate) elements.sessionGate.hidden = false;
-    if (elements.sessionLockButton) elements.sessionLockButton.hidden = true;
+    if (elements.sessionLockWrap) elements.sessionLockWrap.hidden = true;
     setSessionFormError(message || '');
-    setStatus(message || 'Enter the staff password to enable lookups.', 'error');
+    setSessionLoginLoading(false);
+    setStatus(message || 'Enter the staff password to enable lookups.', 'error', false);
     setModeLabel();
     setButtonState();
+    syncWorkspaceGate();
+    if (elements.sessionPassword) {
+      try {
+        elements.sessionPassword.focus();
+      } catch (e) {}
+    }
+  }
+
+  function openLoginSuccessDialog() {
+    if (!elements.loginSuccessDialog) return;
+    try {
+      elements.loginSuccessDialog.showModal();
+    } catch (e) {}
   }
 
   function hideSessionGateAfterLogin() {
@@ -227,12 +477,13 @@
     if (elements.sessionGate) elements.sessionGate.hidden = true;
     if (elements.sessionPassword) elements.sessionPassword.value = '';
     setSessionFormError('');
-    if (elements.sessionLockButton) {
-      elements.sessionLockButton.hidden = !sessionLockApplicable;
+    if (elements.sessionLockWrap) {
+      elements.sessionLockWrap.hidden = !sessionLockApplicable;
     }
     setModeLabel();
-    setStatus('Ready to scan.', null);
+    setStatus('Ready to scan.', null, false);
     setButtonState();
+    syncWorkspaceGate();
   }
 
   function beginSessionBootstrap() {
@@ -250,10 +501,12 @@
         if (!data.sessionAuthRequired) {
           sessionLockApplicable = false;
           sessionOk = true;
-          if (elements.sessionLockButton) elements.sessionLockButton.hidden = true;
-          setStatus('Ready to scan.', null);
+          if (elements.sessionGate) elements.sessionGate.hidden = true;
+          if (elements.sessionLockWrap) elements.sessionLockWrap.hidden = true;
+          setStatus('Ready to scan.', null, false);
           setModeLabel();
           setButtonState();
+          syncWorkspaceGate();
           return;
         }
 
@@ -280,9 +533,9 @@
           });
       })
       .catch(function (error) {
-        setStatus(error.message || 'Could not verify session with backend.', 'error');
         sessionOk = false;
         setButtonState();
+        showSessionGate(error.message || 'Could not verify session with backend.');
       });
   }
 
@@ -373,14 +626,14 @@
     var normalizedId = normalizeParticipantId(participantId);
 
     if (!normalizedId) {
-      setStatus('The scanned code did not contain a participant ID.', 'error');
+      setStatus('The scanned code did not contain a participant ID.', 'error', false);
       return;
     }
 
     if (lookupInFlight) return;
     lookupInFlight = true;
     lastHandledId = normalizedId;
-    setStatus('Looking up ' + normalizedId + '...', null);
+    setStatus('Looking up ' + normalizedId + '…', null, true);
 
     fetchParticipant(normalizedId)
       .then(function (data) {
@@ -389,7 +642,7 @@
           if (data && data.code === 'SESSION_REQUIRED') {
             return;
           }
-          setStatus('No participant found for ID ' + normalizedId + '.', 'error');
+          setStatus('No participant found for ID ' + normalizedId + '.', 'error', false);
           return;
         }
 
@@ -400,12 +653,13 @@
             ' from ' +
             (source || 'lookup') +
             '.',
-          'success'
+          'success',
+          false
         );
       })
       .catch(function (error) {
         clearResult();
-        setStatus(error.message || 'Lookup failed.', 'error');
+        setStatus(error.message || 'Lookup failed.', 'error', false);
       })
       .finally(function () {
         lookupInFlight = false;
@@ -416,12 +670,12 @@
   function scanSelectedImage(file) {
     if (!file) return;
     if (typeof Html5Qrcode === 'undefined') {
-      setStatus('The QR scanner library did not load. Check your internet connection.', 'error');
+      setStatus('The QR scanner library did not load. Check your internet connection.', 'error', false);
       return;
     }
 
     html5QrCode = html5QrCode || new Html5Qrcode('reader');
-    setStatus('Reading QR from selected image...', null);
+    setStatus('Reading QR from selected image…', null, true);
     scanLock = true;
 
     stopScanner()
@@ -436,14 +690,15 @@
 
             lastHandledId = normalizedId;
             elements.scanAgainButton.hidden = false;
-            setStatus('QR detected in image. Looking up ' + normalizedId + '...', null);
+            setStatus('QR detected in image. Looking up ' + normalizedId + '…', null, true);
             handleLookup(normalizedId, 'gallery image');
           })
           .catch(function (error) {
             scanLock = false;
             setStatus(
               (error && error.message) || 'Could not read a QR code from the selected image.',
-              'error'
+              'error',
+              false
             );
           })
           .finally(function () {
@@ -461,9 +716,8 @@
     scanLock = true;
     lastHandledId = normalizedId;
     elements.scanAgainButton.hidden = false;
-    setStatus('QR detected. Looking up ' + normalizedId + '...', null);
+    setStatus('QR detected. Looking up ' + normalizedId + '…', null, true);
     handleLookup(normalizedId, 'scanner');
-    stopScanner().catch(function () {});
   }
 
   function onScanFailure() {}
@@ -481,19 +735,21 @@
   function startScanner() {
     if (scannerActive) return Promise.resolve();
     if (typeof Html5Qrcode === 'undefined') {
-      setStatus('The QR scanner library did not load. Check your internet connection.', 'error');
+      setStatus('The QR scanner library did not load. Check your internet connection.', 'error', false);
       return Promise.resolve();
     }
 
     html5QrCode = html5QrCode || new Html5Qrcode('reader');
 
-    setStatus('Requesting camera access...', null);
+    setStatus('Requesting camera access…', null, true);
     return Html5Qrcode.getCameras()
       .then(function (cameras) {
         var camera = pickCamera(cameras);
         if (!camera) {
           throw new Error('No camera was found on this device.');
         }
+
+        setStatus('Starting camera…', null, true);
 
         return html5QrCode.start(
           camera.id,
@@ -513,7 +769,7 @@
         scanLock = false;
         elements.scanAgainButton.hidden = true;
         setButtonState();
-        setStatus('Camera active. Hold the QR inside the frame.', null);
+        setStatus('Camera active. Hold the QR inside the frame.', null, false);
       })
       .catch(function (error) {
         scannerActive = false;
@@ -521,12 +777,14 @@
         setButtonState();
         setStatus(
           (error && error.message) || 'Camera access failed. Try manual lookup instead.',
-          'error'
+          'error',
+          false
         );
       });
   }
 
   function stopScanner() {
+    scannerPausedForResultModal = false;
     if (!html5QrCode || !scannerActive) {
       scannerActive = false;
       scanLock = false;
@@ -540,7 +798,7 @@
         scannerActive = false;
         scanLock = false;
         setButtonState();
-        setStatus('Camera stopped.', null);
+        setStatus('Camera stopped.', null, false);
       })
       .catch(function () {
         scannerActive = false;
@@ -575,7 +833,7 @@
       selectedImageFile = event.target.files && event.target.files[0] ? event.target.files[0] : null;
       setButtonState();
       if (selectedImageFile) {
-        setStatus('Image selected. Tap "Scan selected image" to start.', null);
+        setStatus('Image selected. Tap "Scan selected image" to start.', null, false);
       }
     });
 
@@ -588,10 +846,13 @@
         event.preventDefault();
         setSessionFormError('');
         var pw = (elements.sessionPassword && elements.sessionPassword.value) || '';
+        setSessionLoginLoading(true);
+        setStatus('Signing in…', null, true);
         postSessionLogin(pw)
           .then(function (data) {
             if (!data || !data.ok) {
               setSessionFormError((data && data.error) || 'Login failed.');
+              setStatus('Sign-in failed. Check the password or try again.', 'error', false);
               return;
             }
             if (data.sessionToken) {
@@ -599,10 +860,15 @@
             }
             if (data.sessionToken || data.sessionAuthRequired === false) {
               hideSessionGateAfterLogin();
+              openLoginSuccessDialog();
             }
           })
           .catch(function (error) {
             setSessionFormError(error.message || 'Network error.');
+            setStatus(error.message || 'Network error.', 'error', false);
+          })
+          .finally(function () {
+            setSessionLoginLoading(false);
           });
       });
     }
@@ -618,33 +884,94 @@
         setButtonState();
       });
     }
+
+    function wireInfoTrigger(trigger, dialog) {
+      if (!trigger || !dialog) return;
+      trigger.addEventListener('click', function () {
+        try {
+          dialog.showModal();
+        } catch (e) {}
+        trigger.setAttribute('aria-expanded', 'true');
+      });
+      dialog.addEventListener('close', function () {
+        trigger.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    function attachDialogBackdropAndOk(dialog) {
+      if (!dialog) return;
+      dialog.addEventListener('click', function (e) {
+        if (e.target === dialog) dialog.close();
+      });
+      var okButtons = dialog.querySelectorAll('[data-close-dialog]');
+      Array.prototype.forEach.call(okButtons, function (btn) {
+        btn.addEventListener('click', function () {
+          dialog.close();
+        });
+      });
+    }
+
+    wireInfoTrigger(elements.infoSigninTrigger, elements.infoSigninDialog);
+    wireInfoTrigger(elements.infoLockTrigger, elements.infoLockDialog);
+    wireInfoTrigger(elements.infoResultTrigger, elements.infoResultDialog);
+    attachDialogBackdropAndOk(elements.infoSigninDialog);
+    attachDialogBackdropAndOk(elements.infoLockDialog);
+    attachDialogBackdropAndOk(elements.infoResultDialog);
+    attachDialogBackdropAndOk(elements.loginSuccessDialog);
+
+    if (elements.resultModal) {
+      elements.resultModal.addEventListener('close', function () {
+        resumeScannerAfterResultModalIfNeeded();
+      });
+      elements.resultModal.addEventListener('click', function (e) {
+        if (e.target === elements.resultModal) elements.resultModal.close();
+      });
+    }
+    if (elements.resultModalClose) {
+      elements.resultModalClose.addEventListener('click', function () {
+        if (elements.resultModal) elements.resultModal.close();
+      });
+    }
+    if (elements.openResultModal) {
+      elements.openResultModal.addEventListener('click', function () {
+        openResultModalDialog();
+      });
+    }
+
+    wireTheme();
   }
 
   function init() {
+    applyColorScheme();
+    syncThemeControls();
     setModeLabel();
     setButtonState();
     clearResult();
     bindEvents();
 
     if (!config.apiBaseUrl && !config.useMockData) {
-      setStatus('Add your Apps Script URL in qr_scanner/config.js before using this app.', 'error');
+      syncWorkspaceGate();
+      setStatus('Add your Apps Script URL in qr_scanner/config.js before using this app.', 'error', false);
       return;
     }
 
     if (config.useMockData && !config.apiBaseUrl) {
-      setStatus('Running in mock mode. Update config.js when your Google Sheets backend is ready.', null);
+      syncWorkspaceGate();
+      setStatus('Running in mock mode. Update config.js when your Google Sheets backend is ready.', null, false);
       return;
     }
 
     if (config.apiBaseUrl) {
       sessionOk = false;
-      setStatus('Checking session…', null);
+      syncWorkspaceGate();
+      setStatus('Checking session…', null, true);
       setButtonState();
       beginSessionBootstrap();
       return;
     }
 
-    setStatus('Ready to scan.', null);
+    syncWorkspaceGate();
+    setStatus('Ready to scan.', null, false);
   }
 
   if (document.readyState === 'loading') {

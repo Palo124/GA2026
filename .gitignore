@@ -1,0 +1,19 @@
+# Node (live-server, build tooling)
+node_modules/
+npm-debug.log*
+
+# Python (qr_from_csv)
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# secrets / local env (never commit)
+.env
+.env.*
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*~

@@ -9,23 +9,72 @@
     content="Scan participant QR codes and show food choice and dietary information."
   />
   <link rel="stylesheet" href="./styles.css" />
+  <script>
+    (function () {
+      try {
+        var v = localStorage.getItem('ga26_qr_theme');
+        if (v === 'light' || v === 'dark') document.documentElement.setAttribute('data-theme', v);
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
+  <div
+    id="app-loading"
+    class="app-loading"
+    hidden
+    aria-hidden="true"
+  >
+    <div class="app-loading-backdrop" aria-hidden="true"></div>
+    <div class="app-loading-panel" role="status" aria-live="polite" aria-atomic="true">
+      <div class="app-loading-spinner" aria-hidden="true"></div>
+      <p id="app-loading-text" class="app-loading-text"></p>
+    </div>
+  </div>
+
   <main class="app-shell">
-    <section class="hero-card">
-      <p class="eyebrow">Event Checkpoint</p>
-      <h1>Participant Diet Scanner</h1>
-      <p class="hero-copy">
-        Scan a participant QR code to load their meal choice and dietary description from Google
-        Sheets.
-      </p>
-    </section>
+    <div class="theme-bar">
+      <label class="theme-switch">
+        <input
+          type="checkbox"
+          id="theme-dark-switch"
+          class="theme-switch-input"
+          aria-label="Dark appearance"
+        />
+        <span class="theme-switch-track" aria-hidden="true">
+          <span class="theme-switch-thumb"></span>
+        </span>
+        <span class="theme-switch-label">Dark</span>
+      </label>
+      <button
+        type="button"
+        id="theme-follow-device"
+        class="btn btn-secondary btn-compact theme-follow-device"
+        aria-label="Use device appearance"
+        hidden
+      >
+        Auto
+      </button>
+    </div>
 
     <section id="session-gate" class="panel session-gate" hidden>
       <div class="panel-heading">
         <div>
-          <h2>Staff sign-in</h2>
-          <p class="muted">Participant data is only available after password login for this browser.</p>
+          <div class="heading-with-info">
+            <h2>Staff sign-in</h2>
+            <button
+              type="button"
+              class="btn-info"
+              id="info-signin-trigger"
+              aria-haspopup="dialog"
+              aria-expanded="false"
+              aria-controls="info-signin-dialog"
+            >
+              <span class="btn-info-mark" aria-hidden="true">i</span>
+              <span class="visually-hidden">About staff sign-in</span>
+            </button>
+          </div>
+          <p class="muted">Enter the checkpoint password to open the scanner. Participant data stays gated until sign-in.</p>
         </div>
       </div>
       <form id="session-form" class="lookup-form">
@@ -39,31 +88,53 @@
             autocomplete="current-password"
             spellcheck="false"
           />
-          <button class="btn btn-primary" type="submit">Unlock</button>
+          <button id="session-unlock" class="btn btn-primary" type="submit">Unlock</button>
         </div>
       </form>
       <p id="session-form-error" class="session-form-error" role="alert" hidden></p>
-      <p class="muted session-gate-hint">
-        Set Apps Script project property <code>LOOKUP_SESSION_PASSWORD</code> to enable this gate.
-      </p>
+    </section>
+
+    <div id="scanner-workspace" class="scanner-workspace" hidden aria-hidden="true">
+    <section class="hero-card">
+      <p class="eyebrow">Event Checkpoint</p>
+      <h1>Participant Diet Scanner</h1>
+      <p class="hero-copy">
     </section>
 
     <section class="panel">
       <div class="panel-heading">
         <div>
           <h2>Camera Scanner</h2>
-          <p class="muted">Best on smartphone with the rear camera.</p>
         </div>
         <div class="panel-heading-actions">
           <span id="mode-pill" class="mode-pill">Checking setup...</span>
-          <button id="session-lock" class="btn btn-secondary btn-compact" type="button" hidden>
-            Lock
-          </button>
+          <div class="session-lock-wrap" id="session-lock-wrap" hidden>
+            <button id="session-lock" class="btn btn-secondary btn-compact" type="button">
+              Lock
+            </button>
+            <button
+              type="button"
+              class="btn-info"
+              id="info-lock-trigger"
+              aria-haspopup="dialog"
+              aria-expanded="false"
+              aria-controls="info-lock-dialog"
+            >
+              <span class="btn-info-mark" aria-hidden="true">i</span>
+              <span class="visually-hidden">About locking the session</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      <div id="status-banner" class="status-banner" role="status" aria-live="polite">
-        Ready to scan.
+      <div
+        id="status-banner"
+        class="status-banner"
+        role="status"
+        aria-live="polite"
+        aria-busy="false"
+      >
+        <span id="status-banner-text" class="status-banner-text">Ready to scan.</span>
       </div>
 
       <div id="reader" class="reader" aria-label="QR code camera preview"></div>
@@ -96,38 +167,56 @@
       </div>
     </section>
 
-    <section class="panel">
-      <div class="panel-heading">
-        <div>
+    <details class="panel manual-lookup-details">
+      <summary class="manual-lookup-summary">
+        <span class="manual-lookup-summary-text">
           <h2>Manual Lookup</h2>
           <p class="muted">Use this if scanning is unavailable or a badge is damaged.</p>
-        </div>
+        </span>
+        <span class="manual-lookup-chevron" aria-hidden="true">▸</span>
+      </summary>
+      <div class="manual-lookup-body">
+        <form id="lookup-form" class="lookup-form">
+          <label class="input-label" for="manual-id">Participant ID</label>
+          <div class="lookup-row">
+            <input
+              id="manual-id"
+              name="participantId"
+              class="text-input"
+              type="text"
+              placeholder="Example: GA26-001"
+              autocomplete="off"
+              autocapitalize="characters"
+              spellcheck="false"
+            />
+            <button class="btn btn-primary" type="submit">Search</button>
+          </div>
+        </form>
       </div>
-
-      <form id="lookup-form" class="lookup-form">
-        <label class="input-label" for="manual-id">Participant ID</label>
-        <div class="lookup-row">
-          <input
-            id="manual-id"
-            name="participantId"
-            class="text-input"
-            type="text"
-            placeholder="Example: GA26-001"
-            autocomplete="off"
-            autocapitalize="characters"
-            spellcheck="false"
-          />
-          <button class="btn btn-primary" type="submit">Search</button>
-        </div>
-      </form>
-    </section>
+    </details>
 
     <section id="result-panel" class="panel result-panel is-empty" aria-live="polite">
       <div class="panel-heading">
         <div>
-          <h2>Participant Result</h2>
+          <div class="heading-with-info">
+            <h2>Participant Result</h2>
+            <button
+              type="button"
+              class="btn-info"
+              id="info-result-trigger"
+              aria-haspopup="dialog"
+              aria-expanded="false"
+              aria-controls="info-result-dialog"
+            >
+              <span class="btn-info-mark" aria-hidden="true">i</span>
+              <span class="visually-hidden">About participant results</span>
+            </button>
+          </div>
           <p class="muted">The latest scanned or searched participant appears here.</p>
         </div>
+        <button type="button" class="btn btn-secondary btn-compact" id="open-result-modal" hidden>
+          Open in modal
+        </button>
       </div>
 
       <div id="result-empty" class="empty-state">
@@ -144,14 +233,101 @@
         <dl id="result-fields" class="result-fields"></dl>
       </div>
     </section>
+    </div>
 
-    <section class="panel small-print">
-      <h2>QR Format</h2>
-      <p>
-        Recommended QR payload: plain participant ID like <code>GA26-001</code>. This app also
-        accepts links containing <code>?participantId=GA26-001</code>.
-      </p>
-    </section>
+    <dialog id="info-signin-dialog" class="sheet-dialog info-sheet" aria-labelledby="info-signin-title">
+      <div class="sheet-dialog-inner">
+        <h3 id="info-signin-title" class="sheet-dialog-title">Staff sign-in</h3>
+        <div class="sheet-dialog-body">
+          <p>
+            The backend can require a checkpoint password before meal and dietary data is returned.
+            After a successful sign-in, this browser stores a short-lived session token (sessionStorage)
+            and sends it with each lookup.
+          </p>
+          <p>
+            The token is cleared when you tap <strong>Lock</strong>, when the session expires, or when
+            the backend reports that sign-in is required again.
+          </p>
+        </div>
+        <button type="button" class="btn btn-primary sheet-dialog-close" data-close-dialog>
+          OK
+        </button>
+      </div>
+    </dialog>
+
+    <dialog id="info-lock-dialog" class="sheet-dialog info-sheet" aria-labelledby="info-lock-title">
+      <div class="sheet-dialog-inner">
+        <h3 id="info-lock-title" class="sheet-dialog-title">Lock session</h3>
+        <div class="sheet-dialog-body">
+          <p>
+            <strong>Lock</strong> clears the stored session token and stops the camera. Scanning and
+            manual lookup stay disabled until someone signs in again with the checkpoint password.
+          </p>
+          <p>Use this when handing the device to another person or leaving the checkpoint unattended.</p>
+        </div>
+        <button type="button" class="btn btn-primary sheet-dialog-close" data-close-dialog>
+          OK
+        </button>
+      </div>
+    </dialog>
+
+    <dialog id="info-result-dialog" class="sheet-dialog info-sheet" aria-labelledby="info-result-title">
+      <div class="sheet-dialog-inner">
+        <h3 id="info-result-title" class="sheet-dialog-title">Participant results</h3>
+        <div class="sheet-dialog-body">
+          <p>
+            After a successful scan or manual search, details open in a full-screen friendly modal.
+            The summary below stays on the page so you can compare or scroll back.
+          </p>
+        </div>
+        <button type="button" class="btn btn-primary sheet-dialog-close" data-close-dialog>
+          OK
+        </button>
+      </div>
+    </dialog>
+
+    <dialog
+      id="login-success-dialog"
+      class="sheet-dialog sheet-dialog--success"
+      aria-labelledby="login-success-title"
+      aria-describedby="login-success-desc"
+    >
+      <div class="sheet-dialog-inner">
+        <h3 id="login-success-title" class="sheet-dialog-title">Signed in</h3>
+        <div id="login-success-desc" class="sheet-dialog-body">
+          <p>
+            Checkpoint session is active on this browser. You can scan QR codes and run manual lookups
+            until you tap <strong>Lock</strong> or the session expires.
+          </p>
+        </div>
+        <button type="button" class="btn btn-primary sheet-dialog-close" data-close-dialog>
+          Continue
+        </button>
+      </div>
+    </dialog>
+
+    <dialog
+      id="result-modal"
+      class="sheet-dialog result-modal"
+      aria-labelledby="modal-result-name"
+      aria-modal="true"
+    >
+      <div class="sheet-dialog-inner result-modal-inner">
+        <div class="result-modal-toolbar">
+          <p class="result-kicker">Participant</p>
+          <button type="button" class="btn-icon-close" id="result-modal-close" aria-label="Close result">
+            ×
+          </button>
+        </div>
+        <div class="result-modal-scroll">
+          <div class="result-header">
+            <h3 id="modal-result-name">-</h3>
+            <p id="modal-result-id" class="result-id">-</p>
+          </div>
+          <dl id="modal-result-fields" class="result-fields"></dl>
+        </div>
+      </div>
+    </dialog>
   </main>
 
   <script src="https://unpkg.com/html5-qrcode" defer></script>
