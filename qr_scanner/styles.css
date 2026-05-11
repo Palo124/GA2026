@@ -909,6 +909,17 @@ body.app-loading-on {
   color: var(--sheet-success-title);
 }
 
+.sheet-dialog--warning {
+  border-color: var(--warning);
+  box-shadow:
+    var(--shadow),
+    0 0 0 1px var(--warning) inset;
+}
+
+.sheet-dialog--warning .sheet-dialog-title {
+  color: var(--warning);
+}
+
 .sheet-dialog-inner {
   padding: 20px;
   display: flex;

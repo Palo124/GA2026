@@ -5,6 +5,7 @@
   var lookupInFlight = false;
   var scanLock = false;
   var lastHandledId = '';
+  var scannedIds = {};
   var resultCache = {};
   var selectedImageFile = null;
   var SESSION_STORAGE_KEY = 'ga26_qr_session_v1';
@@ -43,6 +44,7 @@
     infoLockDialog: document.getElementById('info-lock-dialog'),
     infoResultDialog: document.getElementById('info-result-dialog'),
     loginSuccessDialog: document.getElementById('login-success-dialog'),
+    duplicateScanDialog: document.getElementById('duplicate-scan-dialog'),
     resultModal: document.getElementById('result-modal'),
     resultModalClose: document.getElementById('result-modal-close'),
     modalResultName: document.getElementById('modal-result-name'),
@@ -472,6 +474,16 @@
     } catch (e) {}
   }
 
+  function openDuplicateScanDialog(participantId) {
+    setStatus('QR code ' + participantId + ' was already scanned.', 'error', false);
+    if (!elements.duplicateScanDialog) return;
+    try {
+      if (!elements.duplicateScanDialog.open) {
+        elements.duplicateScanDialog.showModal();
+      }
+    } catch (e) {}
+  }
+
   function hideSessionGateAfterLogin() {
     sessionOk = true;
     if (elements.sessionGate) elements.sessionGate.hidden = true;
@@ -646,6 +658,9 @@
           return;
         }
 
+        if (source === 'scanner' || source === 'gallery image') {
+          scannedIds[normalizedId] = true;
+        }
         renderResult(data);
         setStatus(
           'Loaded ' +
@@ -690,6 +705,11 @@
 
             lastHandledId = normalizedId;
             elements.scanAgainButton.hidden = false;
+            if (scannedIds[normalizedId]) {
+              scanLock = false;
+              openDuplicateScanDialog(normalizedId);
+              return;
+            }
             setStatus('QR detected in image. Looking up ' + normalizedId + '…', null, true);
             handleLookup(normalizedId, 'gallery image');
           })
@@ -712,6 +732,14 @@
   function onScanSuccess(decodedText) {
     var normalizedId = normalizeParticipantId(decodedText);
     if (!normalizedId || normalizedId === lastHandledId || scanLock) return;
+
+    if (scannedIds[normalizedId]) {
+      scanLock = true;
+      lastHandledId = normalizedId;
+      elements.scanAgainButton.hidden = false;
+      openDuplicateScanDialog(normalizedId);
+      return;
+    }
 
     scanLock = true;
     lastHandledId = normalizedId;
@@ -918,6 +946,7 @@
     attachDialogBackdropAndOk(elements.infoLockDialog);
     attachDialogBackdropAndOk(elements.infoResultDialog);
     attachDialogBackdropAndOk(elements.loginSuccessDialog);
+    attachDialogBackdropAndOk(elements.duplicateScanDialog);
 
     if (elements.resultModal) {
       elements.resultModal.addEventListener('close', function () {

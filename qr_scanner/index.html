@@ -307,6 +307,25 @@
     </dialog>
 
     <dialog
+      id="duplicate-scan-dialog"
+      class="sheet-dialog sheet-dialog--warning"
+      aria-labelledby="duplicate-scan-title"
+      aria-describedby="duplicate-scan-desc"
+    >
+      <div class="sheet-dialog-inner">
+        <h3 id="duplicate-scan-title" class="sheet-dialog-title">Already scanned</h3>
+        <div id="duplicate-scan-desc" class="sheet-dialog-body">
+          <p>
+            This QR code has already been scanned in this session.
+          </p>
+        </div>
+        <button type="button" class="btn btn-primary sheet-dialog-close" data-close-dialog>
+          OK
+        </button>
+      </div>
+    </dialog>
+
+    <dialog
       id="result-modal"
       class="sheet-dialog result-modal"
       aria-labelledby="modal-result-name"
