@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "live-server --host=0.0.0.0 --port=5173 --open=./index.html --watch=./index.html,./styles.css,./script.js,./content-loader.js,./content",
     "dev:qr": "live-server --host=0.0.0.0 --port=5174 --open=./qr_scanner/index.html --watch=./qr_scanner",
+    "qr:ids": "node qr_scanner/scripts/generate-participant-ids.js",
     "build": "npx --yes clean-css-cli -o styles.min.css styles.css && npx --yes terser sheet-config.js content-loader.js script.js -o scripts.min.js -c -m"
   },
   "devDependencies": {

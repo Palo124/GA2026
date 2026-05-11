@@ -1,5 +1,5 @@
 window.QR_SCANNER_CONFIG = {
-  apiBaseUrl: 'https://script.google.com/macros/s/AKfycbzxY7OfD10yPSEE1oIcWfPCBUfStHRed4eo_2GP0rsnvu26w6ocAMh6dhxCEjTT4fsF9g/exec',
+  apiBaseUrl: 'https://script.google.com/macros/s/AKfycbw3RzfZMVyrDJXeeohaJm2M1Op_aHcVPUeM-lQxGY3M1YBqOvkeg-8lOE-8YxVe0tLjvQ/exec',
   apiToken: '',
   idParamName: 'participantId',
   tokenParamName: 'token',

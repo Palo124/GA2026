@@ -21,13 +21,45 @@
       </p>
     </section>
 
+    <section id="session-gate" class="panel session-gate" hidden>
+      <div class="panel-heading">
+        <div>
+          <h2>Staff sign-in</h2>
+          <p class="muted">Participant data is only available after password login for this browser.</p>
+        </div>
+      </div>
+      <form id="session-form" class="lookup-form">
+        <label class="input-label" for="session-password">Checkpoint password</label>
+        <div class="lookup-row">
+          <input
+            id="session-password"
+            class="text-input"
+            type="password"
+            name="sessionPassword"
+            autocomplete="current-password"
+            spellcheck="false"
+          />
+          <button class="btn btn-primary" type="submit">Unlock</button>
+        </div>
+      </form>
+      <p id="session-form-error" class="session-form-error" role="alert" hidden></p>
+      <p class="muted session-gate-hint">
+        Set Apps Script project property <code>LOOKUP_SESSION_PASSWORD</code> to enable this gate.
+      </p>
+    </section>
+
     <section class="panel">
       <div class="panel-heading">
         <div>
           <h2>Camera Scanner</h2>
           <p class="muted">Best on smartphone with the rear camera.</p>
         </div>
-        <span id="mode-pill" class="mode-pill">Checking setup...</span>
+        <div class="panel-heading-actions">
+          <span id="mode-pill" class="mode-pill">Checking setup...</span>
+          <button id="session-lock" class="btn btn-secondary btn-compact" type="button" hidden>
+            Lock
+          </button>
+        </div>
       </div>
 
       <div id="status-banner" class="status-banner" role="status" aria-live="polite">

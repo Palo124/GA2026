@@ -7,6 +7,9 @@
   var lastHandledId = '';
   var resultCache = {};
   var selectedImageFile = null;
+  var SESSION_STORAGE_KEY = 'ga26_qr_session_v1';
+  var sessionOk = !config.apiBaseUrl;
+  var sessionLockApplicable = false;
 
   var elements = {
     modePill: document.getElementById('mode-pill'),
@@ -23,7 +26,12 @@
     resultContent: document.getElementById('result-content'),
     resultName: document.getElementById('result-name'),
     resultId: document.getElementById('result-id'),
-    resultFields: document.getElementById('result-fields')
+    resultFields: document.getElementById('result-fields'),
+    sessionGate: document.getElementById('session-gate'),
+    sessionForm: document.getElementById('session-form'),
+    sessionPassword: document.getElementById('session-password'),
+    sessionFormError: document.getElementById('session-form-error'),
+    sessionLockButton: document.getElementById('session-lock')
   };
 
   function setStatus(message, tone) {
@@ -35,7 +43,8 @@
 
   function setModeLabel() {
     if (config.apiBaseUrl) {
-      elements.modePill.textContent = 'Live backend';
+      elements.modePill.textContent =
+        sessionLockApplicable && sessionOk ? 'Live · signed in' : 'Live backend';
       return;
     }
     if (config.useMockData) {
@@ -46,11 +55,25 @@
   }
 
   function setButtonState() {
-    elements.startButton.disabled = scannerActive || typeof Html5Qrcode === 'undefined';
+    var sessionLocked = config.apiBaseUrl && !sessionOk;
+    elements.startButton.disabled =
+      sessionLocked || scannerActive || typeof Html5Qrcode === 'undefined';
     elements.stopButton.disabled = !scannerActive;
+    if (elements.manualId) {
+      elements.manualId.disabled = sessionLocked;
+    }
+    var lookupSubmit =
+      elements.lookupForm && elements.lookupForm.querySelector('button[type="submit"]');
+    if (lookupSubmit) {
+      lookupSubmit.disabled = sessionLocked;
+    }
     if (elements.scanGalleryButton) {
       elements.scanGalleryButton.disabled =
-        !selectedImageFile || lookupInFlight || scanLock || typeof Html5Qrcode === 'undefined';
+        sessionLocked ||
+        !selectedImageFile ||
+        lookupInFlight ||
+        scanLock ||
+        typeof Html5Qrcode === 'undefined';
     }
   }
 
@@ -63,10 +86,10 @@
     elements.resultEmpty.hidden = false;
   }
 
-  function addResultRow(label, value) {
+  function addResultRow(label, value, dayClass) {
     if (!value) return;
     var row = document.createElement('div');
-    row.className = 'result-row';
+    row.className = 'result-row' + (dayClass ? ' ' + dayClass : '');
 
     var dt = document.createElement('dt');
     dt.textContent = label;
@@ -85,9 +108,16 @@
       return;
     }
 
-    elements.resultName.textContent = data.displayName || 'Participant found';
+    elements.resultName.textContent =
+      data.displayName || data.participantId || 'Participant found';
     elements.resultId.textContent = data.participantId || '';
     elements.resultFields.innerHTML = '';
+    addResultRow('Friday lunch', data.fridayLunch, 'result-row--friday');
+    addResultRow('Friday dinner', data.fridayDinner, 'result-row--friday');
+    addResultRow('Saturday lunch', data.saturdayLunch, 'result-row--saturday');
+    addResultRow('Saturday dinner', data.saturdayDinner, 'result-row--saturday');
+    addResultRow('Sunday lunch', data.sundayLunch, 'result-row--sunday');
+    addResultRow('Sunday dinner', data.sundayDinner, 'result-row--sunday');
     addResultRow('Food choice', data.foodChoice);
     addResultRow('Dietary description', data.dietaryDescription);
     addResultRow('Allergens', data.allergens);
@@ -121,13 +151,158 @@
     return value;
   }
 
+  function getStoredSessionToken() {
+    try {
+      return (sessionStorage.getItem(SESSION_STORAGE_KEY) || '').trim();
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function setStoredSessionToken(token) {
+    try {
+      sessionStorage.setItem(SESSION_STORAGE_KEY, token);
+    } catch (e) {}
+  }
+
+  function clearStoredSessionToken() {
+    try {
+      sessionStorage.removeItem(SESSION_STORAGE_KEY);
+    } catch (e) {}
+  }
+
+  function sessionParamName() {
+    return config.sessionParamName || 'sessionToken';
+  }
+
+  function buildStatusUrl() {
+    var url = new URL(config.apiBaseUrl);
+    url.searchParams.set('action', 'status');
+    return url.toString();
+  }
+
+  function buildValidateUrl(token) {
+    var url = new URL(config.apiBaseUrl);
+    url.searchParams.set('action', 'validate');
+    url.searchParams.set(sessionParamName(), token);
+    return url.toString();
+  }
+
   function buildLookupUrl(participantId) {
     var url = new URL(config.apiBaseUrl);
     url.searchParams.set(config.idParamName || 'participantId', participantId);
     if (config.apiToken) {
       url.searchParams.set(config.tokenParamName || 'token', config.apiToken);
     }
+    var st = getStoredSessionToken();
+    if (st) {
+      url.searchParams.set(sessionParamName(), st);
+    }
     return url.toString();
+  }
+
+  function setSessionFormError(message) {
+    if (!elements.sessionFormError) return;
+    if (message) {
+      elements.sessionFormError.textContent = message;
+      elements.sessionFormError.hidden = false;
+    } else {
+      elements.sessionFormError.textContent = '';
+      elements.sessionFormError.hidden = true;
+    }
+  }
+
+  function showSessionGate(message) {
+    sessionOk = false;
+    if (elements.sessionGate) elements.sessionGate.hidden = false;
+    if (elements.sessionLockButton) elements.sessionLockButton.hidden = true;
+    setSessionFormError(message || '');
+    setStatus(message || 'Enter the staff password to enable lookups.', 'error');
+    setModeLabel();
+    setButtonState();
+  }
+
+  function hideSessionGateAfterLogin() {
+    sessionOk = true;
+    if (elements.sessionGate) elements.sessionGate.hidden = true;
+    if (elements.sessionPassword) elements.sessionPassword.value = '';
+    setSessionFormError('');
+    if (elements.sessionLockButton) {
+      elements.sessionLockButton.hidden = !sessionLockApplicable;
+    }
+    setModeLabel();
+    setStatus('Ready to scan.', null);
+    setButtonState();
+  }
+
+  function beginSessionBootstrap() {
+    fetch(buildStatusUrl(), { method: 'GET', cache: 'no-store' })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error('Backend status failed with status ' + response.status + '.');
+        }
+        return response.json();
+      })
+      .then(function (data) {
+        if (!data || !data.ok) {
+          throw new Error('Invalid status response from backend.');
+        }
+        if (!data.sessionAuthRequired) {
+          sessionLockApplicable = false;
+          sessionOk = true;
+          if (elements.sessionLockButton) elements.sessionLockButton.hidden = true;
+          setStatus('Ready to scan.', null);
+          setModeLabel();
+          setButtonState();
+          return;
+        }
+
+        sessionLockApplicable = true;
+        var token = getStoredSessionToken();
+        if (!token) {
+          showSessionGate('');
+          return Promise.resolve();
+        }
+
+        return fetch(buildValidateUrl(token), { method: 'GET', cache: 'no-store' })
+          .then(function (r) {
+            return r.json();
+          })
+          .then(function (v) {
+            if (v && v.sessionValid) {
+              hideSessionGateAfterLogin();
+            } else {
+              clearStoredSessionToken();
+              showSessionGate('Session expired. Sign in again.');
+            }
+            setModeLabel();
+            setButtonState();
+          });
+      })
+      .catch(function (error) {
+        setStatus(error.message || 'Could not verify session with backend.', 'error');
+        sessionOk = false;
+        setButtonState();
+      });
+  }
+
+  function postSessionLogin(password) {
+    var body = new URLSearchParams();
+    body.set('action', 'login');
+    body.set('password', password);
+    return fetch(config.apiBaseUrl, {
+      method: 'POST',
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: body.toString()
+    }).then(function (response) {
+      if (!response.ok) {
+        throw new Error('Login request failed with status ' + response.status + '.');
+      }
+      return response.json();
+    });
   }
 
   function getReaderSize() {
@@ -172,6 +347,12 @@
         }
         return response.json();
       }).then(function (data) {
+        if (data && data.code === 'SESSION_REQUIRED') {
+          clearStoredSessionToken();
+          sessionOk = false;
+          showSessionGate(data.error || 'Session required or expired.');
+          return data;
+        }
         if (data && data.found) resultCache[participantId] = data;
         return data;
       });
@@ -205,13 +386,20 @@
       .then(function (data) {
         if (!data || !data.found) {
           clearResult();
+          if (data && data.code === 'SESSION_REQUIRED') {
+            return;
+          }
           setStatus('No participant found for ID ' + normalizedId + '.', 'error');
           return;
         }
 
         renderResult(data);
         setStatus(
-          'Loaded ' + (data.displayName || normalizedId) + ' from ' + (source || 'lookup') + '.',
+          'Loaded ' +
+            (data.displayName || data.participantId || normalizedId) +
+            ' from ' +
+            (source || 'lookup') +
+            '.',
           'success'
         );
       })
@@ -394,6 +582,42 @@
     elements.scanGalleryButton.addEventListener('click', function () {
       scanSelectedImage(selectedImageFile);
     });
+
+    if (elements.sessionForm) {
+      elements.sessionForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        setSessionFormError('');
+        var pw = (elements.sessionPassword && elements.sessionPassword.value) || '';
+        postSessionLogin(pw)
+          .then(function (data) {
+            if (!data || !data.ok) {
+              setSessionFormError((data && data.error) || 'Login failed.');
+              return;
+            }
+            if (data.sessionToken) {
+              setStoredSessionToken(data.sessionToken);
+            }
+            if (data.sessionToken || data.sessionAuthRequired === false) {
+              hideSessionGateAfterLogin();
+            }
+          })
+          .catch(function (error) {
+            setSessionFormError(error.message || 'Network error.');
+          });
+      });
+    }
+
+    if (elements.sessionLockButton) {
+      elements.sessionLockButton.addEventListener('click', function () {
+        clearStoredSessionToken();
+        sessionOk = false;
+        clearResult();
+        stopScanner().catch(function () {});
+        showSessionGate('');
+        setModeLabel();
+        setButtonState();
+      });
+    }
   }
 
   function init() {
@@ -409,7 +633,18 @@
 
     if (config.useMockData && !config.apiBaseUrl) {
       setStatus('Running in mock mode. Update config.js when your Google Sheets backend is ready.', null);
+      return;
     }
+
+    if (config.apiBaseUrl) {
+      sessionOk = false;
+      setStatus('Checking session…', null);
+      setButtonState();
+      beginSessionBootstrap();
+      return;
+    }
+
+    setStatus('Ready to scan.', null);
   }
 
   if (document.readyState === 'loading') {
