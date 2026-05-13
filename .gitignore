@@ -8,6 +8,10 @@ __pycache__/
 *$py.class
 .venv/
 venv/
+output/
+*.py
+tests.html
+*.md
 
 # secrets / local env (never commit)
 .env

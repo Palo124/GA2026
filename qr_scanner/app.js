@@ -226,16 +226,34 @@
     elements.resultFields.innerHTML = '';
     elements.resultName.textContent = '-';
     elements.resultId.textContent = '-';
+    elements.resultId.hidden = false;
     elements.resultContent.hidden = true;
     elements.resultPanel.classList.add('is-empty');
     elements.resultEmpty.hidden = false;
     if (elements.modalResultFields) elements.modalResultFields.innerHTML = '';
     if (elements.modalResultName) elements.modalResultName.textContent = '-';
-    if (elements.modalResultId) elements.modalResultId.textContent = '-';
+    if (elements.modalResultId) {
+      elements.modalResultId.textContent = '-';
+      elements.modalResultId.hidden = false;
+    }
     if (elements.openResultModal) elements.openResultModal.hidden = true;
+    if (elements.resultModal) {
+      elements.resultModal.classList.remove('result-modal--name-box');
+    }
     if (elements.resultModal && elements.resultModal.open) {
       elements.resultModal.close();
     }
+  }
+
+  /** Meal cell → row modifier. Box → black; vegetarian / vegan / no preference; else non-empty → yellow. */
+  function mealPreferenceRowClass(raw) {
+    var s = String(raw == null ? '' : raw).trim();
+    if (!s) return '';
+    if (/\bbox\b/i.test(s)) return 'result-row--meal-pref-box';
+    if (/\bvegetarian\b/i.test(s)) return 'result-row--meal-pref-vegetarian';
+    if (/\bvegan\b/i.test(s)) return 'result-row--meal-pref-vegan';
+    if (/no\s*preference/i.test(s)) return 'result-row--meal-pref-none';
+    return 'result-row--meal-pref-other';
   }
 
   function addResultRow(label, value, dayClass, container) {
@@ -257,17 +275,31 @@
   }
 
   function fillResultBlocks(data) {
-    var display =
-      data.displayName || data.participantId || 'Participant found';
-    var pid = data.participantId || '';
+    var pid = String(data.participantId == null ? '' : data.participantId).trim();
+    var displayRaw = String(data.displayName == null ? '' : data.displayName).trim();
+    var hasDistinctName = displayRaw.length > 0 && displayRaw !== pid;
+    var headline = hasDistinctName ? displayRaw : pid || displayRaw || 'Participant found';
+    var showIdLine = hasDistinctName && !!pid;
 
-    elements.resultName.textContent = display;
+    elements.resultName.textContent = headline;
     elements.resultId.textContent = pid;
+    elements.resultId.hidden = !showIdLine;
     elements.resultFields.innerHTML = '';
 
-    if (elements.modalResultName) elements.modalResultName.textContent = display;
-    if (elements.modalResultId) elements.modalResultId.textContent = pid;
+    if (elements.modalResultName) elements.modalResultName.textContent = headline;
+    if (elements.modalResultId) {
+      elements.modalResultId.textContent = pid;
+      elements.modalResultId.hidden = !showIdLine;
+    }
     if (elements.modalResultFields) elements.modalResultFields.innerHTML = '';
+
+    if (elements.resultModal) {
+      if (/\bbox\b/i.test(displayRaw + ' ' + pid)) {
+        elements.resultModal.classList.add('result-modal--name-box');
+      } else {
+        elements.resultModal.classList.remove('result-modal--name-box');
+      }
+    }
 
     var modalFields = elements.modalResultFields;
 
@@ -276,12 +308,18 @@
       addResultRow(label, val, cls, modalFields);
     }
 
-    row('Friday lunch', data.fridayLunch, 'result-row--friday');
-    row('Friday dinner', data.fridayDinner, 'result-row--friday');
-    row('Saturday lunch', data.saturdayLunch, 'result-row--saturday');
-    row('Saturday dinner', data.saturdayDinner, 'result-row--saturday');
-    row('Sunday lunch', data.sundayLunch, 'result-row--sunday');
-    row('Sunday dinner', data.sundayDinner, 'result-row--sunday');
+    function mealRow(label, val, cls) {
+      var pref = mealPreferenceRowClass(val);
+      var combined = cls + (pref ? ' ' + pref : '');
+      row(label, val, combined);
+    }
+
+    mealRow('Friday lunch', data.fridayLunch, 'result-row--friday');
+    mealRow('Friday dinner', data.fridayDinner, 'result-row--friday');
+    mealRow('Saturday lunch', data.saturdayLunch, 'result-row--saturday');
+    mealRow('Saturday dinner', data.saturdayDinner, 'result-row--saturday');
+    mealRow('Sunday lunch', data.sundayLunch, 'result-row--sunday');
+    mealRow('Sunday dinner', data.sundayDinner, 'result-row--sunday');
     row('Food choice', data.foodChoice);
     row('Dietary description', data.dietaryDescription);
     row('Allergens', data.allergens);
