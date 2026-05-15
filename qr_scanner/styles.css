@@ -893,6 +893,18 @@ body.app-loading-on {
   color: #fafafa;
 }
 
+.result-panel.result-panel--name-box .result-header,
+.result-modal.result-modal--name-box .result-modal-scroll .result-header {
+  background: #050505;
+  border-color: #000;
+  color: #fff;
+}
+
+.result-panel.result-panel--name-box .result-id,
+.result-modal.result-modal--name-box .result-id {
+  color: rgba(255, 255, 255, 0.72);
+}
+
 html[data-theme="light"] .result-row.result-row--meal-pref-none dt {
   color: #8b1010;
 }
@@ -941,19 +953,16 @@ html[data-theme="light"] .result-row.result-row--meal-pref-box {
 }
 
 .result-modal.result-modal--name-box .result-modal-scroll .result-header {
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.12));
   border-color: rgba(0, 0, 0, 0.45);
 }
 
-html[data-theme="light"] .result-modal.result-modal--name-box .result-modal-toolbar,
-html[data-theme="light"] .result-modal.result-modal--name-box .result-modal-scroll .result-header {
+html[data-theme="light"] .result-modal.result-modal--name-box .result-modal-toolbar {
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.04));
   border-bottom-color: rgba(0, 0, 0, 0.22);
 }
 
 @media (prefers-color-scheme: light) {
-  html:not([data-theme]) .result-modal.result-modal--name-box .result-modal-toolbar,
-  html:not([data-theme]) .result-modal.result-modal--name-box .result-modal-scroll .result-header {
+  html:not([data-theme]) .result-modal.result-modal--name-box .result-modal-toolbar {
     background: linear-gradient(135deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.04));
     border-bottom-color: rgba(0, 0, 0, 0.22);
   }

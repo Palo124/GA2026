@@ -237,6 +237,9 @@
       elements.modalResultId.hidden = false;
     }
     if (elements.openResultModal) elements.openResultModal.hidden = true;
+    if (elements.resultPanel) {
+      elements.resultPanel.classList.remove('result-panel--name-box');
+    }
     if (elements.resultModal) {
       elements.resultModal.classList.remove('result-modal--name-box');
     }
@@ -293,10 +296,18 @@
     }
     if (elements.modalResultFields) elements.modalResultFields.innerHTML = '';
 
-    if (elements.resultModal) {
-      if (/\bbox\b/i.test(displayRaw + ' ' + pid)) {
+    if (/box/i.test(displayRaw)) {
+      if (elements.resultPanel) {
+        elements.resultPanel.classList.add('result-panel--name-box');
+      }
+      if (elements.resultModal) {
         elements.resultModal.classList.add('result-modal--name-box');
-      } else {
+      }
+    } else {
+      if (elements.resultPanel) {
+        elements.resultPanel.classList.remove('result-panel--name-box');
+      }
+      if (elements.resultModal) {
         elements.resultModal.classList.remove('result-modal--name-box');
       }
     }
